@@ -1,4 +1,4 @@
-# Huberman Lab Transcript RAG System
+# Transcript RAG System
 
 A Retrieval-Augmented Generation (RAG) system for querying podcast transcripts using Claude with automatic metadata extraction.
 
