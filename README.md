@@ -2,6 +2,10 @@
 
 A Retrieval-Augmented Generation (RAG) system for querying podcast transcripts using Claude with automatic metadata extraction.
 
+## Demo
+
+![Web Interface Demo](pics/demo.png)
+
 ## Project Structure
 
 ```
@@ -30,9 +34,14 @@ openai/
    pip install -r requirements.txt
    ```
 
-2. **Set your Anthropic API key:**
+2. **Set your API key:**
    ```bash
-   export ANTHROPIC_API_KEY='your-api-key-here'
+   # For OpenAI (default)
+   export OPENAI_API_KEY='your-openai-key-here'
+
+   # Or for Anthropic Claude
+   export ANTHROPIC_API_KEY='your-anthropic-key-here'
+   export LLM_PROVIDER='anthropic'
    ```
 
 3. **Add transcripts to RAG system:**
@@ -54,12 +63,13 @@ openai/
 
 ## Features
 
+- **Multiple LLM Providers**: Supports both OpenAI (default) and Anthropic Claude
 - **Semantic Search**: Automatically finds relevant transcript excerpts for your questions
 - **Automatic Metadata Extraction**: Extracts author, keywords, and topics from file organization
 - **Local Embeddings**: Uses sentence-transformers (no external API needed for embeddings)
 - **Persistent Storage**: Vector database saves to disk for fast subsequent runs
 - **Multiple Authors**: Support for transcripts from multiple podcast hosts
-- **Interactive Chat**: Natural conversation with Claude, enhanced by transcript context
+- **Interactive Chat**: Natural conversation with AI, enhanced by transcript context
 - **Web Interface**: Modern, responsive web UI with real-time streaming
 
 ## Core Files
@@ -68,6 +78,7 @@ openai/
 - `chat_rag.py` - RAG-enhanced terminal chatbot (recommended)
 - `web_chat.py` - Web-based chat interface
 - `rag_system.py` - Core RAG functionality
+- `llm_client.py` - Unified LLM client supporting OpenAI and Anthropic
 - `smart_add_to_rag.py` - Add transcripts with automatic metadata extraction
 - `add_folder_to_rag.py` - Add transcripts with manual metadata entry
 - `metadata_extractor.py` - Automatic metadata extraction logic
@@ -82,15 +93,26 @@ openai/
 ### Terminal Chat
 ```bash
 $ python src/chat_rag.py
+Welcome to the AI Chatbot with RAG! (Using OPENAI: gpt-4o)
 Loading RAG system...
 RAG system ready!
 
 You: What are the benefits of ketamine for depression?
 [Retrieved context from transcripts]
-Claude: Based on the transcripts, ketamine has several notable benefits for treating depression:
+AI: Based on the transcripts, ketamine has several notable benefits for treating depression:
 
 1. **Rapid Relief**: Ketamine provides immediate relief from depressive symptoms...
 [response continues with context from transcripts]
+```
+
+### Switching LLM Providers
+```bash
+# Use OpenAI (default)
+python src/chat_rag.py
+
+# Use Anthropic Claude
+export LLM_PROVIDER=anthropic
+python src/chat_rag.py
 ```
 
 ### Adding Transcripts
@@ -108,9 +130,9 @@ $ python src/add_folder_to_rag.py --folder data/transcripts --author "Author Nam
 ## Architecture
 
 The RAG system uses:
+- **OpenAI GPT-4o** (default) or **Anthropic Claude Sonnet 4.5** for chat responses
 - **ChromaDB** for vector storage
 - **sentence-transformers** (`all-MiniLM-L6-v2`) for embeddings
-- **Anthropic Claude** for chat responses
 - **~500 word chunks** with 50 word overlap for optimal context retrieval
 - **Flask** for the web interface
 

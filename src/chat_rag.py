@@ -1,8 +1,8 @@
-from anthropic import Anthropic
+from llm_client import get_llm_client
 from rag_system import initialize_rag_with_transcripts
 
-# Initialize the Anthropic client
-client = Anthropic()
+# Initialize the LLM client (defaults to OpenAI)
+client = get_llm_client()
 
 # ANSI color codes
 BLUE = "\033[94m"
@@ -12,7 +12,9 @@ RESET = "\033[0m"
 
 def chat_with_rag():
     """Interactive chatbot with RAG-enhanced responses."""
-    print("Welcome to the Claude Chatbot with RAG!")
+    provider_name = client.provider.upper()
+    model_name = client.model
+    print(f"Welcome to the AI Chatbot with RAG! (Using {provider_name}: {model_name})")
     print("This chatbot has access to Huberman Lab podcast transcripts.")
     print("Type 'quit' to exit the chat.")
     print()
@@ -42,21 +44,12 @@ def chat_with_rag():
         else:
             conversation.append({"role": "user", "content": user_input})
 
-        print(f"{GREEN}Claude: {RESET}", end="", flush=True)
-
-        stream = client.messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=2000,
-            messages=conversation,
-            stream=True
-        )
+        print(f"{GREEN}AI: {RESET}", end="", flush=True)
 
         assistant_response = ""
-        for chunk in stream:
-            if chunk.type == "content_block_delta":
-                content = chunk.delta.text
-                print(f"{GREEN}{content}{RESET}", end="", flush=True)
-                assistant_response += content
+        for content in client.stream_chat(messages=conversation, max_tokens=2000):
+            print(f"{GREEN}{content}{RESET}", end="", flush=True)
+            assistant_response += content
 
         print()  # New line after the complete response
 

@@ -1,7 +1,12 @@
-from anthropic import Anthropic
+from llm_client import get_llm_client
+import os
 
-# Initialize the Anthropic client
-client = Anthropic()
+# Initialize the LLM client (defaults to OpenAI)
+# Set environment variables:
+#   export OPENAI_API_KEY=your_openai_key (for OpenAI - default)
+#   export ANTHROPIC_API_KEY=your_anthropic_key (for Anthropic)
+#   export LLM_PROVIDER=openai or anthropic (optional, defaults to openai)
+client = get_llm_client()
 
 # ANSI color codes
 BLUE = "\033[94m"
@@ -9,7 +14,9 @@ GREEN = "\033[92m"
 RESET = "\033[0m"
 
 def chat_with_claude():
-    print("Welcome to the Claude Chatbot!")
+    provider_name = client.provider.upper()
+    model_name = client.model
+    print(f"Welcome to the AI Chatbot! (Using {provider_name}: {model_name})")
     print("Type 'quit' to exit the chat.")
     
     conversation = []
@@ -22,22 +29,13 @@ def chat_with_claude():
             break
         
         conversation.append({"role": "user", "content": user_input})
-        
-        print(f"{GREEN}Claude: {RESET}", end="", flush=True)
-        
-        stream = client.messages.create(
-            model="claude-3-haiku-20240307",
-            max_tokens=1000,
-            messages=conversation,
-            stream=True
-        )
-        
+
+        print(f"{GREEN}AI: {RESET}", end="", flush=True)
+
         assistant_response = ""
-        for chunk in stream:
-            if chunk.type == "content_block_delta":
-                content = chunk.delta.text
-                print(f"{GREEN}{content}{RESET}", end="", flush=True)
-                assistant_response += content
+        for content in client.stream_chat(messages=conversation, max_tokens=1000):
+            print(f"{GREEN}{content}{RESET}", end="", flush=True)
+            assistant_response += content
         
         print()  # New line after the complete response
         

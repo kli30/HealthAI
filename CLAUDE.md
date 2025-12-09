@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 openai/
 ├── src/                          # Essential source code
 │   ├── rag_system.py            # Core RAG system
+│   ├── llm_client.py            # Unified LLM client (OpenAI/Anthropic)
 │   ├── metadata_extractor.py   # Automatic metadata extraction
 │   ├── chat.py                  # Basic chat interface
 │   ├── chat_rag.py              # RAG-enhanced chat
@@ -35,9 +36,14 @@ This is a Python project for interacting with transcripts from multiple domain e
 
 RAG-enhanced chat (with transcript context):
 ```bash
+# Using OpenAI (default)
+python src/chat_rag.py
+
+# Using Anthropic Claude
+export LLM_PROVIDER=anthropic
 python src/chat_rag.py
 ```
-- Type messages to chat with Claude
+- Type messages to chat with AI (OpenAI GPT-4o by default, or Claude)
 - Type 'quit' to exit
 - In RAG mode, relevant transcript chunks are automatically retrieved for each query
 
@@ -96,13 +102,20 @@ python testing/demo_auto_metadata.py
 This demonstrates how automatic metadata extraction works with various filename patterns.
 
 ## Architecture
- 
+
+### LLM Client (`src/llm_client.py`)
+- **Unified Interface**: Single interface for both OpenAI and Anthropic APIs
+- **Default Provider**: OpenAI GPT-4o (can be changed via `LLM_PROVIDER` env var)
+- **Streaming Support**: Consistent streaming interface across providers
+- **Model Configuration**: Default models (GPT-4o for OpenAI, Claude Sonnet 4.5 for Anthropic)
+- **Easy Switching**: Change providers via environment variable without code changes
+
 ### Chat Interface (`src/chat.py`)
-- Uses the Anthropic Python SDK to interface with Claude API
+- Uses the unified LLM client to interface with OpenAI or Anthropic
 - Maintains conversation history in memory for context across messages
-- Streams responses for real-time output using `stream=True`
-- Currently configured to use `claude-3-haiku-20240307` model with 1000 max tokens
-- Uses ANSI color codes for terminal formatting (blue for user, green for Claude)
+- Streams responses for real-time output
+- Default: OpenAI GPT-4o with 1000 max tokens
+- Uses ANSI color codes for terminal formatting (blue for user, green for AI)
 
 ### RAG System (`src/rag_system.py`)
 - **Vector Database**: ChromaDB with persistent storage in `./chroma_db/`
@@ -139,8 +152,8 @@ This demonstrates how automatic metadata extraction works with various filename 
 
 ### RAG-Enhanced Chat (`src/chat_rag.py`)
 - Automatically retrieves top 3 relevant chunks from transcripts for each user query
-- Uses `claude-3-5-sonnet-20241022` with 2000 max tokens (upgraded from Haiku for better RAG performance)
-- Injects retrieved context into messages before sending to Claude
+- Uses unified LLM client (default: OpenAI GPT-4o, or Claude Sonnet 4.5) with 2000 max tokens
+- Injects retrieved context into messages before sending to the LLM
 - Visual indicator when context is retrieved (yellow "[Retrieved context from transcripts]")
 - Maintains full conversation history for multi-turn dialogue
 
@@ -168,7 +181,7 @@ This demonstrates how automatic metadata extraction works with various filename 
    - Query is embedded using the same model
    - Top-k semantically similar chunks are retrieved via vector similarity search
    - Retrieved chunks are prepended to the user's message as context
-   - Claude generates a response informed by relevant transcript excerpts
+   - LLM (OpenAI or Anthropic) generates a response informed by relevant transcript excerpts
 
 ## Dependencies
 
@@ -178,12 +191,15 @@ pip install -r requirements.txt
 ```
 
 This includes:
-- `anthropic` - Claude API client
+- `openai` - OpenAI API client (default LLM provider)
+- `anthropic` - Anthropic Claude API client (alternative LLM provider)
 - `chromadb` - Vector database for RAG
 - `sentence-transformers` - Local embeddings model
 - `flask` - Web framework for the chatbox interface
 
-The Anthropic client expects an API key to be set in the environment variable `ANTHROPIC_API_KEY`.
+**API Key Configuration:**
+- For OpenAI (default): Set `OPENAI_API_KEY` environment variable
+- For Anthropic: Set `ANTHROPIC_API_KEY` and `LLM_PROVIDER=anthropic` environment variables
 
 ## RAG System Notes
 

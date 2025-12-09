@@ -1,14 +1,15 @@
 from flask import Flask, render_template, request, jsonify, Response
-from anthropic import Anthropic
+from llm_client import get_llm_client
 from rag_system import initialize_rag_with_transcripts
 import json
 
 app = Flask(__name__)
 
-# Initialize the Anthropic client
-client = Anthropic()
+# Initialize the LLM client (defaults to OpenAI)
+client = get_llm_client()
 
 # Initialize RAG system
+print(f"Using LLM: {client.provider.upper()} ({client.model})")
 print("Loading RAG system...")
 rag = initialize_rag_with_transcripts()
 print("RAG system ready!")
@@ -69,20 +70,11 @@ def chat():
         else:
             messages_with_context.append({"role": "user", "content": user_message})
 
-        # Stream the Claude response
-        stream = client.messages.create(
-            model="claude-sonnet-4-5-20250929",
-            max_tokens=2000,
-            messages=messages_with_context,
-            stream=True
-        )
-
+        # Stream the LLM response
         assistant_response = ""
-        for chunk in stream:
-            if chunk.type == "content_block_delta":
-                content = chunk.delta.text
-                assistant_response += content
-                yield f"data: {json.dumps({'type': 'content', 'text': content})}\n\n"
+        for content in client.stream_chat(messages=messages_with_context, max_tokens=2000):
+            assistant_response += content
+            yield f"data: {json.dumps({'type': 'content', 'text': content})}\n\n"
 
         # Add assistant response to conversation history
         conversation.append({"role": "assistant", "content": assistant_response})
