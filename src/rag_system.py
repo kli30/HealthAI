@@ -80,13 +80,13 @@ class TranscriptRAG:
 
         print(f"Added {len(chunks)} chunks from {base_name}")
 
-    def query(self, query_text: str, n_results: int = 3, author_filter: str = None) -> List[Tuple[str, dict]]:
+    def query(self, query_text: str, n_results: int = 3, author_filter=None) -> List[Tuple[str, dict]]:
         """Query the vector database for relevant chunks.
 
         Args:
             query_text: The query string
             n_results: Number of results to return
-            author_filter: Optional author name to filter results (e.g., "Andrew Huberman")
+            author_filter: Optional author name(s) to filter results. Can be a string or list of strings.
 
         Returns:
             List of tuples (chunk_text, metadata)
@@ -94,7 +94,12 @@ class TranscriptRAG:
         # Build where clause for filtering by author
         where_clause = None
         if author_filter:
-            where_clause = {"author": author_filter}
+            if isinstance(author_filter, list) and len(author_filter) > 0:
+                # Use $in operator for multiple authors
+                where_clause = {"author": {"$in": author_filter}}
+            elif isinstance(author_filter, str):
+                # Single author filter
+                where_clause = {"author": author_filter}
 
         results = self.collection.query(
             query_texts=[query_text],
@@ -111,17 +116,19 @@ class TranscriptRAG:
 
         return chunks
 
-    def get_context_for_query(self, query_text: str, n_results: int = 3) -> str:
+    def get_context_for_query(self, query_text: str, n_results: int = 3, author_filter=None) -> str:
         """Get formatted context string for a query.
 
         Args:
             query_text: The query string
             n_results: Number of chunks to retrieve
+            author_filter: Optional author name(s) to filter results. Can be a string or list of strings.
 
         Returns:
             Formatted context string to include in a prompt
         """
-        chunks = self.query(query_text, n_results)
+        # Query with author filter (handles both single author and list of authors)
+        chunks = self.query(query_text, n_results, author_filter=author_filter)
 
         if not chunks:
             return ""

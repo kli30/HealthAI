@@ -338,19 +338,91 @@
             display: flex;
             gap: 10px;
         }
+
+        .author-filter-container {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .author-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+
+        .author-checkbox:hover {
+            background: #e9ecef;
+        }
+
+        .author-checkbox input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .author-checkbox label {
+            cursor: pointer;
+            font-size: 13px;
+            color: #495057;
+            margin: 0;
+        }
+
+        .author-checkbox input[type="checkbox"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .select-all-btn {
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .select-all-btn:hover {
+            background: #5568d3;
+        }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h1>Claude RAG Chatbot</h1>
-            <p>Ask questions about the Huberman Lab Podcast transcripts</p>
+            <h1>Health Assistant</h1>
+            <p>Ask questions about health and wellness</p>
+        </div>
+
+        <div class="author-filter-container">
+            <span class="filter-label">Filter by Author:</span>
+            <div id="authorCheckboxes"></div>
+            <button class="select-all-btn" id="selectAllBtn">Select All</button>
         </div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message assistant">
                 <div class="message-content">
-                    Welcome! I'm Claude, and I have access to Huberman Lab podcast transcripts. Ask me anything about the topics discussed in the podcasts!
+                    Welcome! I am a health assistant. Ask me anything about health and wellness!
                 </div>
             </div>
         </div>
@@ -360,7 +432,7 @@
                 type="text"
                 class="chat-input"
                 id="messageInput"
-                placeholder="Ask a question about the transcripts..."
+                placeholder="Ask a question about health and wellness..."
                 autocomplete="off"
             >
             <div class="button-group">
@@ -375,9 +447,12 @@
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
         const clearButton = document.getElementById('clearButton');
+        const authorCheckboxesContainer = document.getElementById('authorCheckboxes');
+        const selectAllBtn = document.getElementById('selectAllBtn');
         const sessionId = 'user_' + Math.random().toString(36).substr(2, 9);
 
         let isProcessing = false;
+        let availableAuthors = [];
 
         // Configure marked.js for better rendering
         marked.setOptions({
@@ -386,6 +461,65 @@
             headerIds: false,
             mangle: false
         });
+
+        // Load authors from the backend
+        async function loadAuthors() {
+            try {
+                const response = await fetch('/authors');
+                const data = await response.json();
+                availableAuthors = data.authors;
+                renderAuthorCheckboxes();
+            } catch (error) {
+                console.error('Error loading authors:', error);
+            }
+        }
+
+        // Render author checkboxes
+        function renderAuthorCheckboxes() {
+            authorCheckboxesContainer.innerHTML = '';
+
+            if (availableAuthors.length === 0) {
+                authorCheckboxesContainer.innerHTML = '<span style="color: #999; font-size: 13px;">No authors available</span>';
+                return;
+            }
+
+            availableAuthors.forEach((author, index) => {
+                const checkboxWrapper = document.createElement('div');
+                checkboxWrapper.className = 'author-checkbox';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `author-${index}`;
+                checkbox.value = author;
+                checkbox.checked = true; // Default: all checked
+
+                const label = document.createElement('label');
+                label.htmlFor = `author-${index}`;
+                label.textContent = author;
+
+                checkboxWrapper.appendChild(checkbox);
+                checkboxWrapper.appendChild(label);
+                authorCheckboxesContainer.appendChild(checkboxWrapper);
+            });
+        }
+
+        // Get selected authors
+        function getSelectedAuthors() {
+            const checkboxes = authorCheckboxesContainer.querySelectorAll('input[type="checkbox"]:checked');
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        // Toggle select all
+        function toggleSelectAll() {
+            const checkboxes = authorCheckboxesContainer.querySelectorAll('input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+            checkboxes.forEach(cb => {
+                cb.checked = !allChecked;
+            });
+
+            selectAllBtn.textContent = allChecked ? 'Select All' : 'Deselect All';
+        }
 
         function addMessage(content, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -452,6 +586,9 @@
             // Show typing indicator
             showTypingIndicator();
 
+            // Get selected authors
+            const selectedAuthors = getSelectedAuthors();
+
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
@@ -460,7 +597,8 @@
                     },
                     body: JSON.stringify({
                         message: message,
-                        session_id: sessionId
+                        session_id: sessionId,
+                        selected_authors: selectedAuthors
                     })
                 });
 
@@ -547,6 +685,7 @@
         // Event listeners
         sendButton.addEventListener('click', sendMessage);
         clearButton.addEventListener('click', clearConversation);
+        selectAllBtn.addEventListener('click', toggleSelectAll);
 
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -554,6 +693,9 @@
                 sendMessage();
             }
         });
+
+        // Load authors on page load
+        loadAuthors();
 
         // Focus input on load
         messageInput.focus();

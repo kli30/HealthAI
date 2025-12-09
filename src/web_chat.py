@@ -23,12 +23,20 @@ def index():
     return render_template('chatbox.html')
 
 
+@app.route('/authors', methods=['GET'])
+def get_authors():
+    """Get list of available authors in the RAG system."""
+    authors = rag.get_authors()
+    return jsonify({'authors': authors})
+
+
 @app.route('/chat', methods=['POST'])
 def chat():
     """Handle chat messages with streaming response."""
     data = request.json
     user_message = data.get('message', '')
     session_id = data.get('session_id', 'default')
+    selected_authors = data.get('selected_authors', [])
 
     if not user_message:
         return jsonify({'error': 'No message provided'}), 400
@@ -39,28 +47,33 @@ def chat():
 
     conversation = conversations[session_id]
 
-    # Retrieve relevant context from transcripts
-    context = rag.get_context_for_query(user_message, n_results=3)
+    # Store only the raw user message in conversation history
+    conversation.append({"role": "user", "content": user_message})
 
-    # Build the message with context if available
-    if context:
-        enhanced_message = f"{context}\n\nUser question: {user_message}"
-        conversation.append({"role": "user", "content": enhanced_message})
-        has_context = True
-    else:
-        conversation.append({"role": "user", "content": user_message})
-        has_context = False
+    # Retrieve relevant context from transcripts, filtered by selected authors
+    context = rag.get_context_for_query(user_message, n_results=3, author_filter=selected_authors)
+    has_context = bool(context)
 
     def generate():
         """Generator function for streaming response."""
         # Send context indicator first
         yield f"data: {json.dumps({'type': 'context', 'has_context': has_context})}\n\n"
 
+        # Build messages array with context injected only for the current query
+        messages_with_context = conversation[:-1]  # All messages except the last user message
+
+        # Add the current user message with context if available
+        if context:
+            enhanced_message = f"{context}\n\nUser question: {user_message}"
+            messages_with_context.append({"role": "user", "content": enhanced_message})
+        else:
+            messages_with_context.append({"role": "user", "content": user_message})
+
         # Stream the Claude response
         stream = client.messages.create(
             model="claude-sonnet-4-5-20250929",
             max_tokens=2000,
-            messages=conversation,
+            messages=messages_with_context,
             stream=True
         )
 
