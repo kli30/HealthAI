@@ -24,17 +24,23 @@ openai/
 │   └── demo_auto_metadata.py   # Metadata extraction demo
 ├── data/                         # Transcript data (organize by author)
 ├── chroma_db/                    # Vector database storage
-└── requirements.txt             # Python dependencies
+├── pyproject.toml               # Project configuration and dependencies (uv)
+└── uv.lock                      # Locked dependencies (uv)
 ```
 
 ## Quick Start
 
-1. **Install dependencies:**
+1. **Install uv (if not already installed):**
    ```bash
-   pip install -r requirements.txt
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-2. **Set your API key:**
+2. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
+
+3. **Set your API key:**
    ```bash
    # For OpenAI (default)
    export OPENAI_API_KEY='your-openai-key-here'
@@ -44,20 +50,20 @@ openai/
    export LLM_PROVIDER='anthropic'
    ```
 
-3. **Add transcripts to RAG system:**
+4. **Add transcripts to RAG system:**
    ```bash
    # Add entire data directory with automatic metadata extraction
-   python src/smart_add_to_rag.py --data-dir
+   uv run python src/smart_add_to_rag.py --data-dir
    ```
 
-4. **Run the RAG-enhanced chatbot:**
+5. **Run the RAG-enhanced chatbot:**
    ```bash
-   python src/chat_rag.py
+   uv run python src/chat_rag.py
    ```
 
-5. **Or run the web interface:**
+6. **Or run the web interface:**
    ```bash
-   python src/web_chat.py
+   uv run python src/web_chat.py
    ```
    Then open http://localhost:5000 in your browser.
 
@@ -92,7 +98,7 @@ openai/
 
 ### Terminal Chat
 ```bash
-$ python src/chat_rag.py
+$ uv run python src/chat_rag.py
 Welcome to the AI Chatbot with RAG! (Using OPENAI: gpt-4o)
 Loading RAG system...
 RAG system ready!
@@ -108,23 +114,23 @@ AI: Based on the transcripts, ketamine has several notable benefits for treating
 ### Switching LLM Providers
 ```bash
 # Use OpenAI (default)
-python src/chat_rag.py
+uv run python src/chat_rag.py
 
 # Use Anthropic Claude
 export LLM_PROVIDER=anthropic
-python src/chat_rag.py
+uv run python src/chat_rag.py
 ```
 
 ### Adding Transcripts
 ```bash
 # Automatic metadata extraction (recommended)
-$ python src/smart_add_to_rag.py --data-dir
+$ uv run python src/smart_add_to_rag.py --data-dir
 
 # Add specific folder
-$ python src/smart_add_to_rag.py --folder data/andrew_huberman
+$ uv run python src/smart_add_to_rag.py --folder data/andrew_huberman
 
 # Manual metadata entry
-$ python src/add_folder_to_rag.py --folder data/transcripts --author "Author Name"
+$ uv run python src/add_folder_to_rag.py --folder data/transcripts --author "Author Name"
 ```
 
 ## Architecture

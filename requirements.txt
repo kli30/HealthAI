@@ -1,5 +1,0 @@
-openai
-anthropic
-chromadb
-sentence-transformers
-flask

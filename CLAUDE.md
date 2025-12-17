@@ -37,11 +37,11 @@ This is a Python project for interacting with transcripts from multiple domain e
 RAG-enhanced chat (with transcript context):
 ```bash
 # Using OpenAI (default)
-python src/chat_rag.py
+uv run python src/chat_rag.py
 
 # Using Anthropic Claude
 export LLM_PROVIDER=anthropic
-python src/chat_rag.py
+uv run python src/chat_rag.py
 ```
 - Type messages to chat with AI (OpenAI GPT-4o by default, or Claude)
 - Type 'quit' to exit
@@ -50,7 +50,7 @@ python src/chat_rag.py
 ### Run Web Chatbox
 Web-based chat interface (with RAG):
 ```bash
-python src/web_chat.py
+uv run python src/web_chat.py
 ```
 Then open your browser to: http://localhost:5000
 - Modern, responsive chat interface
@@ -64,13 +64,13 @@ Then open your browser to: http://localhost:5000
 **Option 1: Automatic metadata extraction (recommended)**
 ```bash
 # Add entire data directory - metadata extracted automatically!
-python src/smart_add_to_rag.py --data-dir
+uv run python src/smart_add_to_rag.py --data-dir
 
 # Add specific folder
-python src/smart_add_to_rag.py --folder data/andrew_huberman
+uv run python src/smart_add_to_rag.py --folder data/andrew_huberman
 
 # Add single file
-python src/smart_add_to_rag.py --file data/huberman/ketamine_depression.txt
+uv run python src/smart_add_to_rag.py --file data/huberman/ketamine_depression.txt
 ```
 Metadata is automatically extracted from:
 - **Author**: folder name (e.g., `data/andrew_huberman/` → "Andrew Huberman")
@@ -80,24 +80,24 @@ Metadata is automatically extracted from:
 **Option 2: Manual metadata entry**
 ```bash
 # Interactive mode (recommended for first-time users)
-python src/add_folder_to_rag.py --interactive
+uv run python src/add_folder_to_rag.py --interactive
 
 # Command-line mode
-python src/add_folder_to_rag.py --folder data/huberman_transcripts --author "Andrew Huberman" --podcast "Huberman Lab"
+uv run python src/add_folder_to_rag.py --folder data/huberman_transcripts --author "Andrew Huberman" --podcast "Huberman Lab"
 
 # With topic metadata
-python src/add_folder_to_rag.py --folder data/transcripts --author "Author Name" --topic "neuroscience" --podcast "Podcast Name"
+uv run python src/add_folder_to_rag.py --folder data/transcripts --author "Author Name" --topic "neuroscience" --podcast "Podcast Name"
 ```
 
 ### View RAG Collection Statistics
 ```bash
-python testing/example_folder_rag.py
+uv run python testing/example_folder_rag.py
 ```
 This displays statistics about your RAG collection, including authors and chunk counts.
 
 ### Test Metadata Extraction
 ```bash
-python testing/demo_auto_metadata.py
+uv run python testing/demo_auto_metadata.py
 ```
 This demonstrates how automatic metadata extraction works with various filename patterns.
 
@@ -185,12 +185,14 @@ This demonstrates how automatic metadata extraction works with various filename 
 
 ## Dependencies
 
+This project uses `uv` for fast, reliable Python package management.
+
 Install all dependencies:
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
-This includes:
+Dependencies include:
 - `openai` - OpenAI API client (default LLM provider)
 - `anthropic` - Anthropic Claude API client (alternative LLM provider)
 - `chromadb` - Vector database for RAG
@@ -290,7 +292,7 @@ This shows:
 **Add with custom override:**
 ```bash
 # Auto-extract metadata but add podcast field
-python src/smart_add_to_rag.py --data-dir --podcast "Huberman Lab"
+uv run python src/smart_add_to_rag.py --data-dir --podcast "Huberman Lab"
 ```
 
 **Programmatic usage:**
@@ -410,6 +412,6 @@ data/
 
 Then add each folder with its respective author metadata:
 ```bash
-python src/add_folder_to_rag.py --folder data/huberman_lab --author "Andrew Huberman"
-python src/add_folder_to_rag.py --folder data/lex_fridman --author "Lex Fridman"
+uv run python src/add_folder_to_rag.py --folder data/huberman_lab --author "Andrew Huberman"
+uv run python src/add_folder_to_rag.py --folder data/lex_fridman --author "Lex Fridman"
 ```
