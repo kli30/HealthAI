@@ -70,6 +70,7 @@ openai/
 ## Features
 
 - **Multiple LLM Providers**: Supports both OpenAI (default) and Anthropic Claude
+- **Contextual Embeddings**: Adds metadata context to chunks before embedding for improved retrieval accuracy
 - **Semantic Search**: Automatically finds relevant transcript excerpts for your questions
 - **Automatic Metadata Extraction**: Extracts author, keywords, and topics from file organization
 - **Local Embeddings**: Uses sentence-transformers (no external API needed for embeddings)

@@ -120,6 +120,7 @@ This demonstrates how automatic metadata extraction works with various filename 
 ### RAG System (`src/rag_system.py`)
 - **Vector Database**: ChromaDB with persistent storage in `./chroma_db/`
 - **Embeddings**: Uses `sentence-transformers` with the `all-MiniLM-L6-v2` model (local, no API required)
+- **Contextual Embeddings**: Prepends metadata (author, topic, keywords) to chunks before embedding for better retrieval
 - **Chunking Strategy**: Splits transcripts into ~500 word chunks with 50 word overlap
 - **Retrieval**: Semantic search returns top-k most relevant chunks with source metadata
 - **Key Class**: `TranscriptRAG` handles indexing, querying, and context formatting
@@ -210,6 +211,76 @@ Dependencies include:
 - **Reindexing**: To reindex transcripts, delete the `./chroma_db/` directory or call `rag.clear_collection()`.
 - **Chunk Metadata**: Each chunk includes `source` (filename), `chunk_index` (position), and custom metadata like `topic`, `podcast`, and `author`.
 - **Customization**: Adjust chunk size, overlap, or number of retrieved results in `src/rag_system.py`.
+
+## Contextual Embeddings
+
+### What are Contextual Embeddings?
+
+Contextual embeddings enhance retrieval accuracy by prepending metadata to each chunk before embedding. Instead of embedding just the raw text, we embed:
+
+```
+[Author: Andrew Huberman | Topic: sleep | Keywords: circadian, rhythm | Podcast: Huberman Lab]
+
+Sleep is fundamental to cognitive function and overall health...
+```
+
+This helps the embedding model better understand:
+- **Who** is speaking (author)
+- **What** the topic is about (topic/keywords)
+- **Where** it comes from (podcast/source)
+
+### Benefits
+
+1. **Better Author Disambiguation**: Distinguishes between different experts discussing the same topic
+2. **Improved Topic Matching**: Helps find content about specific subjects more accurately
+3. **Keyword Enhancement**: Keywords boost relevance for specific search terms
+4. **Cleaner Results**: Original chunks are stored separately, so search results remain clean
+
+### How It Works
+
+**When adding transcripts:**
+```python
+from rag_system import TranscriptRAG
+
+rag = TranscriptRAG()
+
+# With contextual embeddings (default, recommended)
+rag.add_transcript(
+    "data/huberman/sleep.txt",
+    metadata={
+        "author": "Andrew Huberman",
+        "topic": "sleep",
+        "keywords": ["circadian", "rhythm", "melatonin"],
+        "podcast": "Huberman Lab"
+    },
+    use_contextual_embeddings=True  # Default
+)
+
+# Without contextual embeddings (legacy mode)
+rag.add_transcript(
+    "data/huberman/sleep.txt",
+    metadata={"author": "Andrew Huberman"},
+    use_contextual_embeddings=False
+)
+```
+
+**When querying:**
+```python
+# Returns clean chunks (original text) by default
+results = rag.query("What does Huberman say about sleep?", return_original=True)
+
+# Or return the full contextual chunks
+results = rag.query("What does Huberman say about sleep?", return_original=False)
+```
+
+### Testing Contextual Embeddings
+
+Run the demo to see contextual embeddings in action:
+```bash
+uv run python testing/demo_contextual_embeddings.py
+```
+
+This compares retrieval accuracy with and without contextual embeddings.
 
 ## Automatic Metadata Extraction
 

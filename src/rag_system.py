@@ -26,7 +26,7 @@ class TranscriptRAG:
             embedding_function=self.embedding_function
         )
 
-    def chunk_text(self, text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
+    def chunk_text(self, text: str, chunk_size: int = 200, overlap: int = 50) -> List[str]:
         """Split text into overlapping chunks.
 
         Args:
@@ -47,12 +47,54 @@ class TranscriptRAG:
 
         return chunks
 
-    def add_transcript(self, transcript_path: str, metadata: dict = None):
+    def create_contextual_chunk(self, chunk: str, metadata: dict) -> str:
+        """Create a contextual version of a chunk by prepending metadata.
+
+        This helps the embedding model better understand the context of each chunk,
+        leading to more accurate semantic search.
+
+        Args:
+            chunk: The original text chunk
+            metadata: Metadata dictionary containing author, topic, keywords, etc.
+
+        Returns:
+            Chunk with contextual header prepended
+        """
+        context_parts = []
+
+        # Add author context
+        if 'author' in metadata:
+            context_parts.append(f"Author: {metadata['author']}")
+
+        # Add topic context
+        if 'topic' in metadata:
+            context_parts.append(f"Topic: {metadata['topic']}")
+
+        # Add keywords context
+        if 'keywords' in metadata:
+            keywords = metadata['keywords']
+            if isinstance(keywords, list):
+                keywords = ', '.join(keywords)
+            context_parts.append(f"Keywords: {keywords}")
+
+        # Add podcast/source context
+        if 'podcast' in metadata:
+            context_parts.append(f"Podcast: {metadata['podcast']}")
+
+        # Build the contextual header
+        if context_parts:
+            header = ' | '.join(context_parts)
+            return f"[{header}]\n\n{chunk}"
+        else:
+            return chunk
+
+    def add_transcript(self, transcript_path: str, metadata: dict = None, use_contextual_embeddings: bool = True):
         """Add a transcript to the vector database.
 
         Args:
             transcript_path: Path to the transcript file
             metadata: Optional metadata to associate with the transcript
+            use_contextual_embeddings: If True, prepend contextual information to chunks before embedding
         """
         with open(transcript_path, 'r') as f:
             text = f.read()
@@ -64,29 +106,50 @@ class TranscriptRAG:
         ids = [f"{base_name}_chunk_{i}" for i in range(len(chunks))]
 
         # Add source file to metadata for each chunk
+        # Convert list values to strings for ChromaDB compatibility
         metadatas = []
         for i in range(len(chunks)):
             chunk_metadata = {"source": base_name, "chunk_index": i}
             if metadata:
-                chunk_metadata.update(metadata)
+                # Deep copy metadata and convert lists to comma-separated strings
+                for key, value in metadata.items():
+                    if isinstance(value, list):
+                        chunk_metadata[key] = ', '.join(str(v) for v in value)
+                    else:
+                        chunk_metadata[key] = value
             metadatas.append(chunk_metadata)
 
-        # Add to collection
+        # Create contextual versions of chunks if enabled
+        if use_contextual_embeddings and metadata:
+            contextual_chunks = [
+                self.create_contextual_chunk(chunk, metadata)
+                for chunk in chunks
+            ]
+        else:
+            contextual_chunks = chunks
+
+        # Add to collection (contextual chunks are embedded, original chunks stored in metadata)
+        # Store original chunks in metadata for clean retrieval
+        for i, chunk_metadata in enumerate(metadatas):
+            chunk_metadata['original_chunk'] = chunks[i]
+
         self.collection.add(
-            documents=chunks,
+            documents=contextual_chunks,
             ids=ids,
             metadatas=metadatas
         )
 
-        print(f"Added {len(chunks)} chunks from {base_name}")
+        context_note = " with contextual embeddings" if use_contextual_embeddings else ""
+        print(f"Added {len(chunks)} chunks from {base_name}{context_note}")
 
-    def query(self, query_text: str, n_results: int = 3, author_filter=None) -> List[Tuple[str, dict]]:
+    def query(self, query_text: str, n_results: int = 3, author_filter=None, return_original: bool = True) -> List[Tuple[str, dict]]:
         """Query the vector database for relevant chunks.
 
         Args:
             query_text: The query string
             n_results: Number of results to return
             author_filter: Optional author name(s) to filter results. Can be a string or list of strings.
+            return_original: If True, return original chunks without context headers (cleaner for display)
 
         Returns:
             List of tuples (chunk_text, metadata)
@@ -112,7 +175,14 @@ class TranscriptRAG:
         if results['documents'] and results['documents'][0]:
             for i, doc in enumerate(results['documents'][0]):
                 metadata = results['metadatas'][0][i] if results['metadatas'] else {}
-                chunks.append((doc, metadata))
+
+                # Return original chunk if available and requested (for cleaner display)
+                if return_original and 'original_chunk' in metadata:
+                    chunk_text = metadata['original_chunk']
+                else:
+                    chunk_text = doc
+
+                chunks.append((chunk_text, metadata))
 
         return chunks
 
