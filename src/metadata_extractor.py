@@ -82,13 +82,12 @@ def format_name(name_str: str) -> str:
     return name
 
 
-def extract_author_from_path(file_path: str, data_dir: str = "data") -> Optional[str]:
+def extract_author_from_path(file_path: str) -> Optional[str]:
     """
-    Extract author name from the subfolder structure under data directory.
+    Extract author name from the parent folder of the transcript file.
 
     Args:
         file_path: Full path to the file
-        data_dir: Name of the data directory (default: "data")
 
     Returns:
         Author name in Title Case, or None if not found
@@ -97,21 +96,13 @@ def extract_author_from_path(file_path: str, data_dir: str = "data") -> Optional
         'data/andrew_huberman/transcript.txt' -> 'Andrew Huberman'
         'data/lex_fridman/episode_123.txt' -> 'Lex Fridman'
         '/home/user/data/tim_ferriss/file.txt' -> 'Tim Ferriss'
+        'any_folder/jane_doe/transcript.txt' -> 'Jane Doe'
     """
     path = Path(file_path)
-    parts = path.parts
 
-    # Find the data directory in the path
-    try:
-        data_index = parts.index(data_dir)
-        # The next part after 'data' should be the author folder
-        if data_index + 1 < len(parts):
-            author_folder = parts[data_index + 1]
-            return format_name(author_folder)
-    except ValueError:
-        # 'data' not in path, try to use parent directory
-        if path.parent.name and path.parent.name != '.':
-            return format_name(path.parent.name)
+    # Use parent directory as author
+    if path.parent.name and path.parent.name != '.':
+        return format_name(path.parent.name)
 
     return None
 
@@ -221,15 +212,15 @@ def infer_topic_from_keywords(keywords: List[str], filename: str = "") -> str:
 
 def extract_all_metadata(
     file_path: str,
-    data_dir: str = "data",
     custom_metadata: Optional[Dict[str, str]] = None
 ) -> Dict[str, any]:
     """
     Extract all metadata from a file path automatically.
 
+    The author is inferred from the parent folder name of the transcript file.
+
     Args:
         file_path: Full path to the file
-        data_dir: Name of the data directory (default: "data")
         custom_metadata: Optional dictionary of custom metadata to merge
 
     Returns:
@@ -248,7 +239,7 @@ def extract_all_metadata(
     path = Path(file_path)
 
     # Extract components
-    author = extract_author_from_path(file_path, data_dir)
+    author = extract_author_from_path(file_path)
     keywords = extract_keywords_from_filename(path.name)
     topic = infer_topic_from_keywords(keywords, path.name)
 
@@ -291,10 +282,10 @@ if __name__ == "__main__":
 
     # Test cases
     test_files = [
-        "data/Andrew Huberman/Adderall, Stimulants & Modafinil for ADHD Short- & Long-Term Effects   Huberman Lab Podcast.txt",
-        "data/Lex Fridman/Artificial Intelligence and the Future of Humanity.txt",
-        "data/Tim Ferriss/The-4-Hour-Body-Sleep-Optimization.txt",
-        "data/Neuroscience Podcasts/Brain Plasticity Learning.txt",
+        "/home/user/healthAI/data/Andrew Huberman/Adderall, Stimulants & Modafinil for ADHD Short- & Long-Term Effects   Huberman Lab Podcast.txt",
+        "/home/user/healthAI/data/Lex Fridman/Artificial Intelligence and the Future of Humanity.txt",
+        "/home/user/healthAI/data/Tim Ferriss/The-4-Hour-Body-Sleep-Optimization.txt",
+        "/home/user/healthAI/data/Neuroscience Podcasts/Brain Plasticity Learning.txt",
     ]
 
     for test_file in test_files:

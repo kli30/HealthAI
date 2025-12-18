@@ -73,7 +73,7 @@ uv run python src/smart_add_to_rag.py --folder data/andrew_huberman
 uv run python src/smart_add_to_rag.py --file data/huberman/ketamine_depression.txt
 ```
 Metadata is automatically extracted from:
-- **Author**: folder name (e.g., `data/andrew_huberman/` → "Andrew Huberman")
+- **Author**: parent folder name (e.g., `andrew_huberman/file.txt` → "Andrew Huberman")
 - **Keywords**: filename (e.g., `ketamine_depression.txt` → ["ketamine", "depression"])
 - **Topic**: inferred from keywords (e.g., ["ketamine", "depression"] → "medicine")
 
@@ -137,8 +137,9 @@ This demonstrates how automatic metadata extraction works with various filename 
 - **Progress Tracking**: Shows processing status for each file
 
 ### Automatic Metadata Extraction (`src/metadata_extractor.py` & `src/smart_add_to_rag.py`)
-- **Smart Author Extraction**: Parses folder structure to extract author names
-  - `data/andrew_huberman/` → "Andrew Huberman"
+- **Smart Author Extraction**: Infers author from parent folder name
+  - `andrew_huberman/file.txt` → "Andrew Huberman"
+  - `any_folder/author_name/file.txt` → "Author Name"
   - Handles snake_case, kebab-case, and spaces
 - **Keyword Parsing**: Extracts meaningful keywords from filenames
   - `ketamine_benefits_depression.txt` → ["ketamine", "benefits", "depression"]
@@ -320,12 +321,13 @@ python src/smart_add_to_rag.py --data-dir
 ### Metadata Extraction Rules
 
 1. **Author Extraction**
-   - Extracted from subfolder name under `data/`
+   - Extracted from parent folder name of the transcript file
    - Formatting: `snake_case` → `Title Case`
    - Examples:
-     - `data/andrew_huberman/` → "Andrew Huberman"
-     - `data/lex_fridman/` → "Lex Fridman"
-     - `data/tim-ferriss/` → "Tim Ferriss"
+     - `andrew_huberman/file.txt` → "Andrew Huberman"
+     - `lex_fridman/file.txt` → "Lex Fridman"
+     - `tim-ferriss/file.txt` → "Tim Ferriss"
+     - `data/author_name/file.txt` → "Author Name"
 
 2. **Keyword Extraction**
    - Parsed from filename (before `.txt` extension)

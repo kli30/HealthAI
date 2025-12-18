@@ -3,7 +3,7 @@
 Smart RAG file/folder adder with automatic metadata extraction.
 
 This script automatically extracts metadata from file paths and filenames:
-- Author: from subfolder name under 'data/'
+- Author: from parent folder name
 - Keywords: parsed from filename
 - Topic: inferred from keywords and filename
 """
@@ -19,9 +19,9 @@ from metadata_extractor import extract_all_metadata, print_metadata
 def add_file_with_auto_metadata(
     file_path: str,
     rag: TranscriptRAG,
-    data_dir: str = "data",
     custom_metadata: Optional[Dict[str, str]] = None,
-    verbose: bool = True
+    verbose: bool = True,
+    use_contextual_embeddings: bool = True,
 ) -> bool:
     """
     Add a single file to RAG with automatically extracted metadata.
@@ -29,7 +29,6 @@ def add_file_with_auto_metadata(
     Args:
         file_path: Path to the file
         rag: TranscriptRAG instance
-        data_dir: Name of the data directory for author extraction
         custom_metadata: Optional custom metadata to override/add
         verbose: Print extraction details
 
@@ -38,13 +37,14 @@ def add_file_with_auto_metadata(
     """
     try:
         # Extract metadata automatically
-        metadata = extract_all_metadata(file_path, data_dir, custom_metadata)
+        metadata = extract_all_metadata(file_path, custom_metadata)
 
         if verbose:
             print_metadata(metadata, f"Processing: {Path(file_path).name}")
+            print(f"Use contextual embeddings: {use_contextual_embeddings}\n")
 
         # Add to RAG system
-        rag.add_transcript(file_path, metadata=metadata)
+        rag.add_transcript(file_path, metadata=metadata, use_contextual_embeddings=use_contextual_embeddings)
 
         if verbose:
             print(f"✓ Successfully added to RAG\n")
@@ -59,12 +59,12 @@ def add_file_with_auto_metadata(
 def add_folder_with_auto_metadata(
     folder_path: str,
     file_extension: str = ".txt",
-    data_dir: str = "data",
     custom_metadata: Optional[Dict[str, str]] = None,
     collection_name: str = "transcripts",
     persist_directory: str = "./chroma_db",
     recursive: bool = False,
-    verbose: bool = True
+    verbose: bool = True,
+    use_contextual_embeddings: bool = True,
 ) -> int:
     """
     Add all files from a folder to RAG with automatic metadata extraction.
@@ -72,7 +72,6 @@ def add_folder_with_auto_metadata(
     Args:
         folder_path: Path to the folder containing files
         file_extension: File extension to look for
-        data_dir: Name of the data directory for author extraction
         custom_metadata: Optional custom metadata to add to all files
         collection_name: ChromaDB collection name
         persist_directory: Directory to persist the vector database
@@ -87,6 +86,7 @@ def add_folder_with_auto_metadata(
         print(f"Initializing RAG system...")
         print(f"Collection: {collection_name}")
         print(f"Persist directory: {persist_directory}\n")
+        print(f"Use contextual embeddings: {use_contextual_embeddings}\n")
 
     rag = TranscriptRAG(collection_name=collection_name, persist_directory=persist_directory)
 
@@ -118,9 +118,9 @@ def add_folder_with_auto_metadata(
         if add_file_with_auto_metadata(
             str(file_path),
             rag,
-            data_dir=data_dir,
             custom_metadata=custom_metadata,
-            verbose=verbose
+            verbose=verbose,
+            use_contextual_embeddings=use_contextual_embeddings,
         ):
             added_count += 1
 
@@ -140,16 +140,18 @@ def add_folder_with_auto_metadata(
 
 
 def add_data_directory(
-    data_path: str = "data",
+    data_dir: str = "./data",
     file_extension: str = ".txt",
     collection_name: str = "transcripts",
-    persist_directory: str = "./chroma_db"
+    persist_directory: str = "./chroma_db",
+    verbose: bool = True,
+    use_contextual_embeddings: bool = True,
 ) -> int:
     """
     Add all files from the data directory and its subfolders.
 
     This is the simplest way to add all your transcripts - just organize
-    them in folders under 'data/' and run this function.
+    them in folders by author and run this function.
 
     Directory structure expected:
         data/
@@ -160,22 +162,24 @@ def add_data_directory(
             └── transcript3.txt
 
     Args:
-        data_path: Path to the data directory
+        data_dir: Path to the data directory
         file_extension: File extension to look for
         collection_name: ChromaDB collection name
         persist_directory: Directory to persist the vector database
+        verbose: Print detailed output
+        use_contextual_embeddings: Use contextual embeddings for embedding
 
     Returns:
         Total number of files added
     """
     return add_folder_with_auto_metadata(
-        folder_path=data_path,
+        folder_path=data_dir,
         file_extension=file_extension,
-        data_dir=Path(data_path).name,
         collection_name=collection_name,
         persist_directory=persist_directory,
         recursive=True,
-        verbose=True
+        verbose=verbose,
+        use_contextual_embeddings=use_contextual_embeddings,
     )
 
 
@@ -209,7 +213,7 @@ Directory structure for automatic author extraction:
       └── ai_future.txt                 # Topic: technology
 
 Metadata is automatically extracted:
-  - Author: from subfolder name (e.g., 'andrew_huberman' -> 'Andrew Huberman')
+  - Author: from parent folder name (e.g., 'andrew_huberman/file.txt' -> 'Andrew Huberman')
   - Keywords: from filename (e.g., 'ketamine_depression' -> ['ketamine', 'depression'])
   - Topic: inferred from keywords (e.g., ['ketamine', 'depression'] -> 'medicine')
         """
@@ -229,15 +233,9 @@ Metadata is automatically extracted:
 
     parser.add_argument(
         '--data-dir',
-        action='store_true',
-        help='Add all files from the data directory recursively (default: ./data)'
-    )
-
-    parser.add_argument(
-        '--data-path',
         type=str,
-        default='data',
-        help='Path to data directory (default: data)'
+        default='./data',
+        help='Add all files from the data directory recursively (default: ./data)'
     )
 
     parser.add_argument(
@@ -293,10 +291,10 @@ Metadata is automatically extracted:
         # Handle data directory mode (simplest)
         if args.data_dir:
             if verbose:
-                print(f"Adding all files from '{args.data_path}/' recursively...")
+                print(f"Adding all files from '{args.data_dir}/' recursively...")
                 print()
             add_data_directory(
-                data_path=args.data_path,
+                data_dir=args.data_dir,
                 file_extension=args.extension,
                 collection_name=args.collection,
                 persist_directory=args.persist_dir
@@ -311,9 +309,9 @@ Metadata is automatically extracted:
             add_file_with_auto_metadata(
                 args.file,
                 rag,
-                data_dir=Path(args.data_path).name,
                 custom_metadata=custom_metadata if custom_metadata else None,
-                verbose=verbose
+                verbose=verbose,
+                use_contextual_embeddings=use_contextual_embeddings,
             )
             if verbose:
                 print("\nCollection Statistics:")
@@ -324,12 +322,12 @@ Metadata is automatically extracted:
             add_folder_with_auto_metadata(
                 folder_path=args.folder,
                 file_extension=args.extension,
-                data_dir=Path(args.data_path).name,
                 custom_metadata=custom_metadata if custom_metadata else None,
                 collection_name=args.collection,
                 persist_directory=args.persist_dir,
                 recursive=args.recursive,
-                verbose=verbose
+                verbose=verbose,
+                use_contextual_embeddings=use_contextual_embeddings,
             )
 
         else:

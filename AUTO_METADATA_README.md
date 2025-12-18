@@ -31,17 +31,18 @@ python src/smart_add_to_rag.py --data-dir
 
 All metadata is automatically extracted and stored:
 
-- **Author**: From folder name (`andrew_huberman` → "Andrew Huberman")
+- **Author**: From parent folder name (`andrew_huberman/file.txt` → "Andrew Huberman")
 - **Keywords**: From filename (`ketamine_benefits_depression` → ["ketamine", "benefits", "depression"])
 - **Topic**: Inferred from keywords (["ketamine", "depression"] → "medicine")
 
 ## What Gets Extracted
 
 ### Author
-Extracted from the subfolder name under `data/`:
-- `data/andrew_huberman/file.txt` → Author: "Andrew Huberman"
-- `data/lex-fridman/file.txt` → Author: "Lex Fridman"
-- `data/tim_ferriss_show/file.txt` → Author: "Tim Ferriss Show"
+Extracted from the parent folder name:
+- `andrew_huberman/file.txt` → Author: "Andrew Huberman"
+- `lex-fridman/file.txt` → Author: "Lex Fridman"
+- `tim_ferriss_show/file.txt` → Author: "Tim Ferriss Show"
+- `data/author_name/file.txt` → Author: "Author Name"
 
 ### Keywords
 Parsed from the filename:
