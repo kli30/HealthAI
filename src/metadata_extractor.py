@@ -21,6 +21,7 @@ STOP_WORDS = {
 }
 
 # Topic mapping based on common keywords
+# Standardized 8 topics for health/wellness content
 TOPIC_KEYWORDS = {
     'neuroscience': [
         'brain', 'neural', 'neuron', 'dopamine', 'serotonin', 'cortisol',
@@ -28,8 +29,8 @@ TOPIC_KEYWORDS = {
         'consciousness', 'neurotransmitter', 'synapse', 'cerebral'
     ],
     'health': [
-        'fitness', 'exercise', 'nutrition', 'diet', 'supplement', 'vitamin',
-        'wellness', 'healthy', 'immune', 'metabolism', 'disease', 'treatment'
+        'health', 'wellness', 'healthy', 'immune', 'immunity', 'disease',
+        'prevention', 'longevity', 'aging', 'metabolic', 'metabolism'
     ],
     'psychology': [
         'mental', 'emotion', 'behavior', 'mood', 'anxiety', 'depression',
@@ -37,23 +38,27 @@ TOPIC_KEYWORDS = {
         'ptsd', 'trauma', 'adhd'
     ],
     'sleep': [
-        'sleep', 'circadian', 'insomnia', 'rem', 'melatonin', 'adenosine'
+        'sleep', 'circadian', 'insomnia', 'rem', 'melatonin', 'adenosine',
+        'nap', 'rest', 'wake', 'drowsy'
     ],
     'performance': [
         'performance', 'productivity', 'focus', 'concentration', 'optimization',
-        'enhancement', 'peak', 'flow', 'training'
-    ],
-    'technology': [
-        'ai', 'artificial', 'intelligence', 'machine', 'learning', 'computer',
-        'software', 'algorithm', 'data', 'neural', 'network', 'programming'
-    ],
-    'science': [
-        'research', 'study', 'scientific', 'experiment', 'evidence', 'clinical',
-        'trial', 'findings', 'discovery'
+        'enhancement', 'peak', 'flow', 'efficiency', 'energy'
     ],
     'medicine': [
         'medical', 'clinical', 'drug', 'medication', 'treatment', 'therapy',
-        'ketamine', 'pharmaceutical', 'diagnosis', 'patient', 'doctor'
+        'ketamine', 'pharmaceutical', 'diagnosis', 'patient', 'doctor',
+        'prescription', 'dose', 'protocol'
+    ],
+    'nutrition': [
+        'nutrition', 'diet', 'food', 'eating', 'meal', 'nutrient', 'vitamin',
+        'supplement', 'fasting', 'keto', 'carb', 'protein', 'fat', 'calorie',
+        'macronutrient', 'micronutrient'
+    ],
+    'exercise': [
+        'exercise', 'workout', 'training', 'fitness', 'strength', 'cardio',
+        'muscle', 'weight', 'lift', 'run', 'physical', 'movement', 'activity',
+        'hiit', 'resistance', 'endurance'
     ]
 }
 
@@ -282,10 +287,10 @@ if __name__ == "__main__":
 
     # Test cases
     test_files = [
-        "/home/user/healthAI/data/Andrew Huberman/Adderall, Stimulants & Modafinil for ADHD Short- & Long-Term Effects   Huberman Lab Podcast.txt",
         "/home/user/healthAI/data/Lex Fridman/Artificial Intelligence and the Future of Humanity.txt",
         "/home/user/healthAI/data/Tim Ferriss/The-4-Hour-Body-Sleep-Optimization.txt",
         "/home/user/healthAI/data/Neuroscience Podcasts/Brain Plasticity Learning.txt",
+        "/home/user/healthAI/data/Andrew Huberman/data/andrew_huberman/xWelcome to the Huberman Lab Podcast.txt",
     ]
 
     for test_file in test_files:

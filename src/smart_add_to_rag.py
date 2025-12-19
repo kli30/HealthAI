@@ -143,7 +143,7 @@ def add_data_directory(
     data_dir: str = "./data",
     file_extension: str = ".txt",
     collection_name: str = "transcripts",
-    persist_directory: str = "./chroma_db",
+    persist_directory: str = "./chroma_db300",
     verbose: bool = True,
     use_contextual_embeddings: bool = True,
 ) -> int:
@@ -261,8 +261,8 @@ Metadata is automatically extracted:
     parser.add_argument(
         '--persist-dir',
         type=str,
-        default='./chroma_db',
-        help='Directory to persist the vector database (default: ./chroma_db)'
+        default='./chroma_db300',
+        help='Directory to persist the vector database (default: ./chroma_db300)'
     )
 
     # Optional custom metadata
@@ -278,6 +278,12 @@ Metadata is automatically extracted:
         help='Suppress verbose output'
     )
 
+    parser.add_argument(
+        "--use-contextual-embeddings",
+        action='store_true',
+        help='Use contextual embeddings for embedding'
+    )
+
     args = parser.parse_args()
 
     # Build custom metadata if provided
@@ -286,6 +292,8 @@ Metadata is automatically extracted:
         custom_metadata['podcast'] = args.podcast
 
     verbose = not args.quiet
+
+    print("use_contextual_embeddings", args.use_contextual_embeddings)
 
     try:
         # Handle data directory mode (simplest)
@@ -297,7 +305,9 @@ Metadata is automatically extracted:
                 data_dir=args.data_dir,
                 file_extension=args.extension,
                 collection_name=args.collection,
-                persist_directory=args.persist_dir
+                persist_directory=args.persist_dir,
+                verbose=verbose,
+                use_contextual_embeddings=args.use_contextual_embeddings,
             )
 
         # Handle single file

@@ -22,7 +22,7 @@ class LLMClient:
         if self.provider == "openai":
             from openai import OpenAI
             self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-            self.model = model or "gpt-4o"  # Default to GPT-4o
+            self.model = model or "gpt-5-mini"  # Default to GPT-5 Mini
         elif self.provider == "anthropic":
             from anthropic import Anthropic
             self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -51,7 +51,7 @@ class LLMClient:
         stream = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
-            max_tokens=max_tokens,
+            max_completion_tokens=max_tokens,
             stream=True
         )
 

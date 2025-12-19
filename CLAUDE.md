@@ -36,28 +36,50 @@ This is a Python project for interacting with transcripts from multiple domain e
 
 RAG-enhanced chat (with transcript context):
 ```bash
-# Using OpenAI (default)
+# Using OpenAI with default database (./chroma_db)
 uv run python src/chat_rag.py
 
-# Using Anthropic Claude
+# Using custom database
+uv run python src/chat_rag.py --db ./chroma_db_context
+
+# Using Anthropic Claude with custom database
 export LLM_PROVIDER=anthropic
-uv run python src/chat_rag.py
+uv run python src/chat_rag.py --db ./my_custom_db
+
+# View all options
+uv run python src/chat_rag.py --help
 ```
 - Type messages to chat with AI (OpenAI GPT-4o by default, or Claude)
 - Type 'quit' to exit
 - In RAG mode, relevant transcript chunks are automatically retrieved for each query
+- Use `--db` to specify which ChromaDB database to use
 
 ### Run Web Chatbox
 Web-based chat interface (with RAG):
 ```bash
+# Using default database on default port (5000)
 uv run python src/web_chat.py
+
+# Using custom database
+uv run python src/web_chat.py --db ./chroma_db_context
+
+# Using custom port
+uv run python src/web_chat.py --port 8080
+
+# Using custom database and port
+uv run python src/web_chat.py --db ./my_custom_db --port 8080
+
+# View all options
+uv run python src/web_chat.py --help
 ```
-Then open your browser to: http://localhost:5000
+Then open your browser to: http://localhost:5000 (or your custom port)
 - Modern, responsive chat interface
 - Real-time streaming responses
 - Automatic context retrieval from transcripts
 - Session-based conversation history
 - Clear conversation button
+- Use `--db` to specify which ChromaDB database to use
+- Use `--port` to change the web server port
 
 ### Add Folder of Transcripts to RAG
 
@@ -210,7 +232,7 @@ Dependencies include:
 - **First Run**: On first execution, `src/chat_rag.py` will download the sentence-transformers model (~100MB) and index both transcripts. This may take 30-60 seconds.
 - **Persistence**: The vector database is persisted to `./chroma_db/`, so subsequent runs are instant.
 - **Reindexing**: To reindex transcripts, delete the `./chroma_db/` directory or call `rag.clear_collection()`.
-- **Chunk Metadata**: Each chunk includes `source` (filename), `chunk_index` (position), and custom metadata like `topic`, `podcast`, and `author`.
+- **Chunk Metadata**: Each chunk includes `source` (filename), `chunk_index` (position), and custom metadata like `keywords` and `author`.
 - **Customization**: Adjust chunk size, overlap, or number of retrieved results in `src/rag_system.py`.
 
 ## Contextual Embeddings
@@ -220,21 +242,21 @@ Dependencies include:
 Contextual embeddings enhance retrieval accuracy by prepending metadata to each chunk before embedding. Instead of embedding just the raw text, we embed:
 
 ```
-[Author: Andrew Huberman | Topic: sleep | Keywords: circadian, rhythm | Podcast: Huberman Lab]
+[Author: Andrew Huberman | Keywords: circadian, rhythm | Source: sleep_huberman.txt]
 
 Sleep is fundamental to cognitive function and overall health...
 ```
 
 This helps the embedding model better understand:
 - **Who** is speaking (author)
-- **What** the topic is about (topic/keywords)
-- **Where** it comes from (podcast/source)
+- **What** keywords are relevant (keywords)
+- **Where** it comes from (source filename)
 
 ### Benefits
 
-1. **Better Author Disambiguation**: Distinguishes between different experts discussing the same topic
-2. **Improved Topic Matching**: Helps find content about specific subjects more accurately
-3. **Keyword Enhancement**: Keywords boost relevance for specific search terms
+1. **Better Author Disambiguation**: Distinguishes between different experts discussing similar topics
+2. **Keyword Enhancement**: Keywords boost relevance for specific search terms
+3. **Source Context**: Filename/source information helps identify the origin of content
 4. **Cleaner Results**: Original chunks are stored separately, so search results remain clean
 
 ### How It Works
@@ -250,12 +272,11 @@ rag.add_transcript(
     "data/huberman/sleep.txt",
     metadata={
         "author": "Andrew Huberman",
-        "topic": "sleep",
-        "keywords": ["circadian", "rhythm", "melatonin"],
-        "podcast": "Huberman Lab"
+        "keywords": ["circadian", "rhythm", "melatonin"]
     },
     use_contextual_embeddings=True  # Default
 )
+# Note: 'source' (filename) is automatically added by the system
 
 # Without contextual embeddings (legacy mode)
 rag.add_transcript(

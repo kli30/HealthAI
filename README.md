@@ -12,14 +12,21 @@ A Retrieval-Augmented Generation (RAG) system for querying podcast transcripts u
 openai/
 ├── src/                          # Essential source code
 │   ├── rag_system.py            # Core RAG system
+│   ├── llm_client.py            # Unified LLM client (OpenAI/Anthropic)
 │   ├── metadata_extractor.py   # Automatic metadata extraction
+│   ├── rag_evaluator.py         # LLM-as-judge evaluation engine
+│   ├── test_generator.py        # Auto-generate test datasets
+│   ├── report_generator.py      # Generate markdown reports
 │   ├── chat.py                  # Basic chat interface
 │   ├── chat_rag.py              # RAG-enhanced chat
 │   ├── web_chat.py              # Web interface
 │   ├── smart_add_to_rag.py     # Smart RAG adder (auto metadata)
 │   ├── add_folder_to_rag.py    # Manual RAG adder
 │   └── templates/               # HTML templates for web interface
-├── testing/                      # Testing and example code
+├── testing/                      # Testing and evaluation
+│   ├── run_evaluation.py        # CLI for running evaluations
+│   ├── test_datasets/           # Test question datasets (JSON)
+│   ├── evaluation_results/      # Generated evaluation reports (markdown)
 │   ├── example_folder_rag.py   # Usage examples
 │   └── demo_auto_metadata.py   # Metadata extraction demo
 ├── data/                         # Transcript data (organize by author)
@@ -73,6 +80,7 @@ openai/
 - **Contextual Embeddings**: Adds metadata context to chunks before embedding for improved retrieval accuracy
 - **Semantic Search**: Automatically finds relevant transcript excerpts for your questions
 - **Automatic Metadata Extraction**: Extracts author, keywords, and topics from file organization
+- **LLM-as-Judge Evaluation**: Comprehensive evaluation system with quality metrics and performance tracking
 - **Local Embeddings**: Uses sentence-transformers (no external API needed for embeddings)
 - **Persistent Storage**: Vector database saves to disk for fast subsequent runs
 - **Multiple Authors**: Support for transcripts from multiple podcast hosts
@@ -86,12 +94,18 @@ openai/
 - `web_chat.py` - Web-based chat interface
 - `rag_system.py` - Core RAG functionality
 - `llm_client.py` - Unified LLM client supporting OpenAI and Anthropic
+- `rag_evaluator.py` - LLM-as-judge evaluation engine
+- `test_generator.py` - Auto-generate test datasets
+- `report_generator.py` - Generate markdown evaluation reports
 - `smart_add_to_rag.py` - Add transcripts with automatic metadata extraction
 - `add_folder_to_rag.py` - Add transcripts with manual metadata entry
 - `metadata_extractor.py` - Automatic metadata extraction logic
 - `chat.py` - Basic chatbot without RAG
 
-### Testing & Examples (`testing/`)
+### Testing & Evaluation (`testing/`)
+- `run_evaluation.py` - CLI for running comprehensive evaluations
+- `test_datasets/` - Test question datasets in JSON format
+- `evaluation_results/` - Generated evaluation reports in markdown
 - `example_folder_rag.py` - View collection statistics and usage examples
 - `demo_auto_metadata.py` - Demonstrate metadata extraction
 
@@ -133,6 +147,128 @@ $ uv run python src/smart_add_to_rag.py --folder data/andrew_huberman
 # Manual metadata entry
 $ uv run python src/add_folder_to_rag.py --folder data/transcripts --author "Author Name"
 ```
+
+## Evaluation & Testing
+
+The system includes a comprehensive evaluation framework using **LLM-as-Judge** methodology to assess RAG performance.
+
+### Quick Evaluation
+
+Run a quick evaluation on sample questions:
+```bash
+uv run python testing/run_evaluation.py --num-questions 5
+```
+
+View the generated report in `testing/evaluation_results/`.
+
+### Features
+
+- **Dual Metrics**: Evaluates both retrieval quality and response quality separately
+- **LLM-as-Judge**: Uses structured prompts for consistent, nuanced evaluation
+- **Hallucination Detection**: Identifies unsupported claims in responses
+- **Performance Tracking**: Measures query speed (retrieval time, response time)
+- **Comprehensive Reports**: Human-readable markdown with metrics, explanations, and recommendations
+
+### Evaluation Metrics
+
+**Retrieval Quality:**
+- Relevance Score (0-5 scale)
+- Precision@K
+- Mean Reciprocal Rank (MRR)
+- Recall (if expected sources provided)
+
+**Response Quality:**
+- Accuracy: Correctness of the answer
+- Completeness: Coverage of important aspects
+- Faithfulness: Grounding in retrieved context (hallucination detection)
+- Relevance: Directly addresses the question
+
+**Performance:**
+- Retrieval time (vector search)
+- Response generation time (LLM)
+- Total query time
+
+### Generate Test Dataset
+
+Auto-generate diverse test questions from your transcripts:
+
+```bash
+# Generate 100 test questions
+uv run python src/test_generator.py --output testing/test_datasets/my_tests.json --num-questions 100
+```
+
+This creates questions across 5 categories:
+- **Specific author queries** (30%): "What does [Author] say about...?"
+- **Topic-based queries** (25%): "How to improve sleep quality?"
+- **Multi-hop queries** (20%): "Compare different approaches to..."
+- **Fact-based queries** (15%): "What are the benefits of...?"
+- **Comparison queries** (10%): "How do experts differ on...?"
+
+### Run Evaluation
+
+**Full evaluation:**
+```bash
+uv run python testing/run_evaluation.py
+```
+
+**Custom options:**
+```bash
+# Evaluate with custom dataset
+uv run python testing/run_evaluation.py --dataset testing/test_datasets/my_tests.json
+
+# Limit number of questions (faster testing)
+uv run python testing/run_evaluation.py --num-questions 10
+
+# Filter by specific author
+uv run python testing/run_evaluation.py --author-filter "Andrew Huberman"
+
+# Use different ChromaDB database
+uv run python testing/run_evaluation.py --chroma-db ./custom_chroma_db
+
+# Verbose progress
+uv run python testing/run_evaluation.py --verbose
+```
+
+### Interpret Results
+
+The evaluation generates a markdown report with:
+
+1. **Executive Summary**: Overall scores, hallucination rate, key findings
+2. **Retrieval Performance**: Relevance scores, precision, performance by query type
+3. **Response Quality**: Accuracy, completeness, faithfulness, relevance
+4. **Query Speed Performance**: Average/min/max times for retrieval and response generation
+5. **Top/Worst Cases**: Best and worst performing test cases
+6. **Detailed Breakdown**: Per-question analysis with judge explanations
+7. **Recommendations**: Actionable suggestions for improvement
+
+**Example output:**
+```markdown
+## Executive Summary
+Total Test Cases: 100
+
+| Metric | Score |
+|--------|-------|
+| Retrieval Quality | 4.2/5.0 |
+| Response Quality | 4.5/5.0 |
+| Hallucination Rate | 2.3% |
+| Precision@3 | 0.87 |
+
+## Query Speed Performance
+| Metric | Avg (ms) | Min (ms) | Max (ms) |
+|--------|----------|----------|----------|
+| Retrieval Time | 106 | 8 | 301 |
+| Response Generation | 8411 | 7590 | 9119 |
+| Total Time | 26811 | 23799 | 28944 |
+```
+
+### Evaluation Files
+
+- `src/rag_evaluator.py` - Core evaluation engine with LLM-as-judge
+- `src/test_generator.py` - Auto-generates test datasets
+- `src/report_generator.py` - Creates markdown reports
+- `testing/run_evaluation.py` - CLI for running evaluations
+- `testing/test_datasets/` - Test question datasets
+- `testing/evaluation_results/` - Generated evaluation reports
 
 ## Architecture
 

@@ -26,7 +26,7 @@ class TranscriptRAG:
             embedding_function=self.embedding_function
         )
 
-    def chunk_text(self, text: str, chunk_size: int = 200, overlap: int = 50) -> List[str]:
+    def chunk_text(self, text: str, chunk_size: int = 300, overlap: int = 30) -> List[str]:
         """Split text into overlapping chunks.
 
         Args:
@@ -55,7 +55,7 @@ class TranscriptRAG:
 
         Args:
             chunk: The original text chunk
-            metadata: Metadata dictionary containing author, topic, keywords, etc.
+            metadata: Metadata dictionary containing author, keywords, source, etc.
 
         Returns:
             Chunk with contextual header prepended
@@ -66,10 +66,6 @@ class TranscriptRAG:
         if 'author' in metadata:
             context_parts.append(f"Author: {metadata['author']}")
 
-        # Add topic context
-        if 'topic' in metadata:
-            context_parts.append(f"Topic: {metadata['topic']}")
-
         # Add keywords context
         if 'keywords' in metadata:
             keywords = metadata['keywords']
@@ -77,9 +73,9 @@ class TranscriptRAG:
                 keywords = ', '.join(keywords)
             context_parts.append(f"Keywords: {keywords}")
 
-        # Add podcast/source context
-        if 'podcast' in metadata:
-            context_parts.append(f"Podcast: {metadata['podcast']}")
+        # Add source context (base filename)
+        if 'source' in metadata:
+            context_parts.append(f"Source: {metadata['source']}")
 
         # Build the contextual header
         if context_parts:
@@ -286,9 +282,9 @@ class TranscriptRAG:
         print("=" * 60 + "\n")
 
 
-def initialize_rag_with_transcripts():
+def initialize_rag_with_transcripts(persist_directory: str):
     """Initialize RAG system and load all transcripts."""
-    rag = TranscriptRAG()
+    rag = TranscriptRAG(persist_directory=persist_directory)
 
     # Check if collection is already populated
     count = rag.collection.count()
@@ -313,7 +309,7 @@ def initialize_rag_with_transcripts():
 
 if __name__ == "__main__":
     # Example usage
-    rag = initialize_rag_with_transcripts()
+    rag = initialize_rag_with_transcripts("./chroma_db_context")
 
     # Test query
     query = "What are the benefits of ketamine for depression?"
