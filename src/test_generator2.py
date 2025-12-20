@@ -131,7 +131,7 @@ class TranscriptBasedTestGenerator:
         test_cases = []
 
         # Use ThreadPoolExecutor for parallel processing
-        max_workers = 4  # Number of parallel LLM calls
+        max_workers = 10  # Number of parallel LLM calls
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Submit all transcripts for processing
@@ -214,15 +214,14 @@ class TranscriptBasedTestGenerator:
             # Debug output (can be removed later)
             print(f"  [{author}] {transcript_info['filename'][:50]}: {num_questions} questions ({questions_per_type} per type)")
 
-            # Generate questions for each type
-            for question_type in question_types:
-                questions = self._generate_questions_for_transcript(
-                    content=content,
-                    transcript_info=transcript_info,
-                    question_type=question_type,
-                    num_questions=questions_per_type
-                )
-                test_cases.extend(questions)
+            # Generate all questions in a single API call
+            all_questions = self._generate_all_questions_for_transcript(
+                content=content,
+                transcript_info=transcript_info,
+                question_types=question_types,
+                questions_per_type=questions_per_type
+            )
+            test_cases.extend(all_questions)
 
         except Exception as e:
             raise Exception(f"Failed to process {transcript_info['filename']}: {str(e)}")
@@ -272,23 +271,185 @@ class TranscriptBasedTestGenerator:
 
         return test_cases
 
+    def _generate_all_questions_for_transcript(
+        self,
+        content: str,
+        transcript_info: Dict[str, Any],
+        question_types: List[str],
+        questions_per_type: int
+    ) -> List[Dict[str, Any]]:
+        """Generate all question types for a transcript in a single API call."""
+        author = transcript_info["author"]
+        keywords = transcript_info["keywords"]
+        source_file = transcript_info["filename"]
+
+        # Build comprehensive prompt for all question types
+        prompt = f"""Based on the following transcript, generate questions across multiple categories.
+
+TRANSCRIPT:
+{content}
+
+---
+
+Generate {questions_per_type} questions for EACH of the following categories:
+
+"""
+
+        # Add category-specific instructions
+        if "factual" in question_types:
+            prompt += f"""
+1. FACTUAL QUESTIONS ({questions_per_type} questions):
+   - Ask about specific knowledge, facts, recommendations, or mechanisms
+   - Use natural, conversational phrasing - ask questions as people naturally would
+   - Keep it simple - ONE concept per question, avoid chaining with "and"
+   - Example: "What role do astrocytes play in synaptic transmission?"
+   - Example: "What is the half-life of caffeine?"
+   - Example: "How does omega-3 affect triglyceride levels?"
+   - AVOID: "According to the study...", "The research shows...", etc.
+
+"""
+
+        if "comprehension" in question_types:
+            prompt += f"""
+2. COMPREHENSION QUESTIONS ({questions_per_type} questions):
+   - Test understanding of relationships between concepts
+   - Use simple, direct language - how would someone naturally ask this?
+   - Focus on ONE relationship at a time
+   - Example: "Why do certain diseases go away during pregnancy?"
+   - Example: "What are the benefits of omega-3 fatty acids?"
+   - Example: "How does sleep affect cognitive function?"
+   - AVOID: Complex multi-part questions, contextual references
+
+"""
+
+        if "application" in question_types:
+            prompt += f"""
+3. APPLICATION QUESTIONS ({questions_per_type} questions):
+   - Ask how to apply knowledge practically
+   - Use conversational, everyday language
+   - Focus on ONE practical application per question
+   - Example: "How can someone optimize their sleep schedule?"
+   - Example: "What is the recommended dose of melatonin?"
+   - Example: "How can cold exposure be used safely?"
+   - AVOID: "What practical steps..." - just ask directly
+
+"""
+
+        if "specific" in question_types:
+            prompt += f"""
+4. SPECIFIC QUESTIONS ({questions_per_type} questions):
+   - Generate questions focusing on transcript title: {source_file}, with helps from the transcript content
+   - Use natural, conversational phrasing
+   - Do NOT reference {author} by name
+   - Keep it simple and direct
+   - Example: for "Is Medicine the Answer", ask "Is medicine the answer?"
+   - Example: for "Best Exercise for Depression", ask "What is the best exercise for depression?"
+   - Example: for "Using Light to Optimize Health", ask "How can light optimize health?"
+   - AVOID: Complex phrasing, multiple concepts in one question
+
+"""
+
+        prompt += """
+FORMAT YOUR RESPONSE EXACTLY AS:
+
+FACTUAL:
+1. [question]
+2. [question]
+...
+
+COMPREHENSION:
+1. [question]
+2. [question]
+...
+
+APPLICATION:
+1. [question]
+2. [question]
+...
+
+SPECIFIC:
+1. [question]
+2. [question]
+...
+
+(Only include categories that were requested above)
+"""
+
+        # Generate questions with single API call
+        response = self._generate_with_llm(prompt, max_tokens=1500)
+
+        # Parse the categorized response
+        test_cases = self._parse_categorized_questions(
+            response,
+            transcript_info
+        )
+
+        return test_cases
+
+    def _parse_categorized_questions(
+        self,
+        response: str,
+        transcript_info: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """Parse questions organized by category from LLM response."""
+        test_cases = []
+        current_category = None
+
+        lines = response.split('\n')
+
+        for line in lines:
+            line = line.strip()
+
+            # Detect category headers
+            line_upper = line.upper()
+            if 'FACTUAL' in line_upper and ':' in line:
+                current_category = 'factual'
+                continue
+            elif 'COMPREHENSION' in line_upper and ':' in line:
+                current_category = 'comprehension'
+                continue
+            elif 'APPLICATION' in line_upper and ':' in line:
+                current_category = 'application'
+                continue
+            elif 'SPECIFIC' in line_upper and ':' in line or 'AUTHOR' in line_upper and ':' in line:
+                current_category = 'specific'
+                continue
+
+            # Parse question lines
+            if current_category and line and (line[0].isdigit() or line.startswith('-')):
+                # Remove numbering
+                question = line.lstrip('0123456789.-) ').strip()
+                if question and len(question) > 15:  # Filter out too-short questions
+                    # Clean up
+                    if not question.endswith('?'):
+                        question += '?'
+
+                    test_cases.append({
+                        "question": question,
+                        "category": current_category,
+                        "source_file": transcript_info["filename"],
+                        "source_path": transcript_info["path"],
+                        "author": transcript_info["author"],
+                        "expected_sources": [transcript_info["filename"]],
+                        "author_filter": transcript_info["author"] if transcript_info["author"] != "Unknown" else None,
+                        "difficulty": self._get_difficulty(current_category),
+                        "ground_truth_aspects": [],
+                        "keywords": transcript_info["keywords"]
+                    })
+
+        return test_cases
+
     def _create_factual_prompt(self, content: str, num: int) -> str:
         """Create prompt for factual questions."""
-        return f"""Based on the following transcript, generate {num} specific factual questions that ask about knowledge, facts, recommendations, or mechanisms.
+        return f"""Generate {num} factual questions that ask about specific knowledge, facts, recommendations, or mechanisms.
 
-IMPORTANT INSTRUCTIONS:
-- Focus on the KNOWLEDGE and INFORMATION presented, not on the episode/conversation itself
-- DO NOT assume this is from a podcast episode or interview
-- DO NOT ask about "this episode", "this conversation", "the interviewer", "the guest", etc.
-- Ask about the TOPIC and CONTENT, not the format or medium
-- Questions should be timeless and transferable beyond a single conversation
+Focus on:
+- Key mechanisms and how things work
+- Specific recommendations or protocols
+- Scientific findings or data
+- Dose ranges, timings, or quantitative information
 
-BAD EXAMPLES (avoid these):
-❌ "What company mentioned in the episode was founded by two swimmers?"
-❌ "What is the primary purpose of this episode?"
-❌ "What does the interviewer discuss about X?"
-
-GOOD EXAMPLES (generate questions like these):
+Examples:
 ✓ "What are the key mechanisms by which X affects Y?"
 ✓ "What specific recommendations are given for optimizing Z?"
 ✓ "What dose ranges are discussed for compound X?"
@@ -296,30 +457,19 @@ GOOD EXAMPLES (generate questions like these):
 Transcript:
 {content}
 
-Generate {num} factual questions in this format:
-1. [Question about specific knowledge, facts, or mechanisms]
-2. [Question about specific recommendations or protocols]
-3. [Question about scientific findings or data]
-
-Make questions focused on knowledge and information, not on the conversation format."""
+Generate {num} factual questions."""
 
     def _create_comprehension_prompt(self, content: str, num: int) -> str:
         """Create prompt for comprehension questions."""
-        return f"""Based on the following transcript, generate {num} comprehension questions that test understanding of main ideas, concepts, or relationships.
+        return f"""Generate {num} comprehension questions that test understanding of main ideas, concepts, or relationships.
 
-IMPORTANT INSTRUCTIONS:
-- Focus on UNDERSTANDING the knowledge and concepts, not on the conversation itself
-- DO NOT reference "this episode", "this podcast", "the interview", "the discussion", etc.
-- Ask about the IDEAS and CONCEPTS presented, not the presentation format
-- Questions should focus on synthesizing knowledge, not on who said what or when
-- Go beyond the current content - ask about broader implications and applications
+Focus on:
+- Relationships between concepts or mechanisms
+- Synthesis of multiple ideas
+- Broader implications or applications
+- How different pieces of information connect
 
-BAD EXAMPLES (avoid these):
-❌ "What is the central message of this episode?"
-❌ "How does the speaker structure their argument in this conversation?"
-❌ "What point does the interviewer make about X?"
-
-GOOD EXAMPLES (generate questions like these):
+Examples:
 ✓ "How does X relate to Y in terms of biological mechanisms?"
 ✓ "What is the relationship between sleep deprivation and cognitive function?"
 ✓ "How do these concepts integrate to explain Z?"
@@ -327,30 +477,19 @@ GOOD EXAMPLES (generate questions like these):
 Transcript:
 {content}
 
-Generate {num} comprehension questions in this format:
-1. [Question about understanding relationships between concepts]
-2. [Question requiring synthesis of multiple ideas]
-3. [Question about broader implications or applications]
-
-Make questions test deep understanding of knowledge and concepts."""
+Generate {num} comprehension questions."""
 
     def _create_application_prompt(self, content: str, num: int) -> str:
         """Create prompt for application questions."""
-        return f"""Based on the following transcript, generate {num} application questions that ask how to apply the knowledge, implement recommendations, or use the information in practical scenarios.
+        return f"""Generate {num} application questions that ask how to apply the knowledge, implement recommendations, or use the information in practical scenarios.
 
-IMPORTANT INSTRUCTIONS:
-- Focus on APPLYING the knowledge presented, not on the conversation format
-- DO NOT ask about "what was discussed in the episode" or similar meta-questions
-- Ask about PRACTICAL APPLICATION of the ideas and recommendations
-- Questions should be about HOW TO USE the knowledge, not about the source material
-- Think beyond the specific context - ask about real-world application
+Focus on:
+- Practical implementation steps
+- Real-world application scenarios
+- How to use specific protocols or techniques
+- Action-oriented recommendations
 
-BAD EXAMPLES (avoid these):
-❌ "Based on this episode, what should you do about X?"
-❌ "What does the guest recommend implementing from this conversation?"
-❌ "What action steps are outlined in this interview?"
-
-GOOD EXAMPLES (generate questions like these):
+Examples:
 ✓ "What practical steps can someone take to optimize their sleep schedule?"
 ✓ "How can cold exposure be incorporated into a weekly routine safely?"
 ✓ "What protocol is recommended for using light therapy to adjust circadian rhythm?"
@@ -358,54 +497,94 @@ GOOD EXAMPLES (generate questions like these):
 Transcript:
 {content}
 
-Generate {num} application questions in this format:
-1. [Question about practical implementation of a concept or recommendation]
-2. [Question about real-world application scenarios]
-3. [Question about how to use specific protocols or techniques]
-
-Make questions practical, action-oriented, and focused on knowledge application."""
+Generate {num} application questions."""
 
     def _create_specific_prompt(self, content: str, transcript_info: Dict, num: int) -> str:
         """Create prompt for author-specific questions."""
         author = transcript_info["author"]
         keywords = transcript_info["keywords"]
 
-        return f"""Based on the following content from {author}, generate {num} questions that ask about {author}'s knowledge, opinions, perspectives, or recommendations on {keywords}.
+        return f"""Generate {num} questions that ask about {author}'s knowledge, opinions, perspectives, or recommendations related to: {keywords}
 
-IMPORTANT INSTRUCTIONS:
-- Ask about {author}'s KNOWLEDGE, OPINIONS, and EXPERTISE, not about a specific episode/conversation
-- DO NOT assume this is from a single podcast episode or interview
-- DO NOT ask about "this episode", "this conversation", "this interview", "the guest", "the interviewer"
-- Focus on {author}'s BODY OF WORK and EXPERTISE, which may span multiple discussions
-- Questions should be about the substantive knowledge and viewpoints, not the format
+Requirements:
+- Explicitly reference {author} by name in each question
+- Focus on {author}'s expertise and viewpoints
+- Ask one focused question at a time
 
-BAD EXAMPLES (avoid these):
-❌ "What company mentioned in the episode was founded by two swimmers?"
-❌ "What is the primary purpose of this episode with {author}?"
-❌ "What does the interviewer ask {author} about?"
-❌ "What topic does {author} discuss in this conversation?"
-
-GOOD EXAMPLES (generate questions like these):
-✓ "What does {author} recommend for optimizing sleep quality?"
-✓ "According to {author}, what are the key mechanisms of neuroplasticity?"
-✓ "What is {author}'s view on the relationship between exercise and mental health?"
-✓ "What protocols does {author} suggest for managing stress?"
+Examples:
+✓ "What does {author} recommend for [specific topic]?"
+✓ "According to {author}, what are the key mechanisms of [concept]?"
+✓ "What is {author}'s perspective on [relationship/concept]?"
 
 Transcript:
 {content}
 
-Generate {num} author-specific questions in this format:
-1. What does {author} say about [specific knowledge or mechanism]?
-2. According to {author}, what are the recommendations for [specific topic]?
-3. What is {author}'s perspective on [specific concept or relationship]?
-
-Make questions reference the author's KNOWLEDGE and OPINIONS explicitly.
-Use {author}'s name, not generic terms like "the speaker", "the expert", or "the interviewer".
-Focus on substantive knowledge that goes beyond a single conversation."""
+Generate {num} author-specific questions (use {author}'s name explicitly)."""
 
     def _generate_with_llm(self, prompt: str, max_tokens: int = 800) -> str:
         """Generate response using LLM."""
-        messages = [{"role": "user", "content": prompt}]
+        system_prompt = """You are an expert question generator for a RAG (Retrieval-Augmented Generation) system evaluation framework.
+
+Your task is to generate high-quality test questions based on transcript content from domain experts.
+
+CORE REQUIREMENTS:
+1. Generate questions that test knowledge retrieval, not conversation recall
+2. Focus on the CONTENT and KNOWLEDGE presented, not the format or medium
+3. Questions should be timeless and transferable BEYOND a single conversation or a podcast
+4. Ask about facts, concepts, mechanisms, recommendations, and applications
+5. Avoid meta-questions about the episode, conversation, interview, or speaker
+6. Generate clear, specific, and answerable questions
+7. Each question should be self-contained and unambiguous
+8. Questions shall be diverse, covering different aspects of the transcript, and not too similar to each other
+9. Questions should be appropriate for testing a RAG system's retrieval accuracy
+
+WHAT TO FOCUS ON:
+- Scientific knowledge, mechanisms, and findings
+- Expert recommendations and protocols
+- Conceptual relationships and principles
+- Practical applications and implementation
+  
+
+WHAT TO AVOID:
+- Questions about "this episode", "this conversation", "this interview", "this podcast", "this transcript"
+- Questions about the interviewer, guest, the speaker or conversational dynamics
+- Meta-questions about the format or structure of the content
+- Vague or ambiguous questions that could have multiple interpretations
+- Questions that assume knowledge outside the provided transcript
+- Contextual references like "according to the transcript", "in the referenced study", "this research shows", "the study mentioned"
+- Overly complex multi-part questions that chain multiple concepts
+- Academic/formal phrasing - use natural, conversational language instead
+
+QUESTION STYLE:
+- Write questions as a person would naturally ask them in conversation
+- Keep questions simple and direct - ask about ONE thing at a time
+- Avoid chaining multiple concepts with "and" - split into separate questions
+- Use natural phrasing, not academic/formal language
+- Bad: "How do magnesium and boron influence vitamin D function and affect lower back health?"
+- Good: "How are magnesium and boron related to lower back health?"
+- Bad: "According to the transcript, what mechanisms are discussed for X?"
+- Good: "What mechanisms are involved in X?"
+
+OUTPUT FORMAT:
+- Return a numbered list of questions (1., 2., 3., etc.)
+- Each question should be a complete, grammatically correct sentence
+- Each question should end with a question mark
+- Keep questions concise and natural (typically 8-15 words)
+
+STEPS TO FOLLOW:
+1. Read the transcript carefully
+2. Identify the main topics and concepts discussed
+3. Generate questions based on the CONTENT and KNOWLEDGE presented, following the core requirements
+4. Output a numbered list of questions
+5. Double check that the questions meet all the requirements
+
+
+Your questions will be used to evaluate whether a RAG system can correctly retrieve and synthesize information from transcript databases."""
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ]
         response = ""
 
         for chunk in self.llm.stream_chat(messages, max_tokens=max_tokens):
