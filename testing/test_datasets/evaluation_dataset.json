@@ -1,0 +1,1564 @@
+{
+  "test_cases": [
+    {
+      "question": "How do anti-inflammatory drugs like ibuprofen interfere with fat loss on a ketogenic diet?",
+      "category": "factual",
+      "source_file": "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "source_path": "testing/sample_data/ken_berry/Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "proper, human, diet, q&a, berry, @neisha",
+      "id": "test_0001"
+    },
+    {
+      "question": "Why does drastically reducing carbohydrate intake help reverse non-alcoholic fatty liver disease?",
+      "category": "comprehension",
+      "source_file": "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "source_path": "testing/sample_data/ken_berry/Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "proper, human, diet, q&a, berry, @neisha",
+      "id": "test_0002"
+    },
+    {
+      "question": "How can you tell if a bacon product is acceptable for a ketogenic diet?",
+      "category": "application",
+      "source_file": "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "source_path": "testing/sample_data/ken_berry/Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "proper, human, diet, q&a, berry, @neisha",
+      "id": "test_0003"
+    },
+    {
+      "question": "What is the proper human diet?",
+      "category": "specific",
+      "source_file": "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "source_path": "testing/sample_data/ken_berry/Proper Human Diet Q&A with Dr Berry & @NEISHA..txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Proper Human Diet Q&A with Dr Berry & @NEISHA..txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "proper, human, diet, q&a, berry, @neisha",
+      "id": "test_0004"
+    },
+    {
+      "question": "What is the leading cause of chronic kidney disease in the United States?",
+      "category": "factual",
+      "source_file": "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "source_path": "testing/sample_data/ken_berry/Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "protect, your, kidneys, this, diet, (whole, grains, out",
+      "id": "test_0005"
+    },
+    {
+      "question": "How do high blood sugar and elevated insulin levels damage kidney blood vessels?",
+      "category": "comprehension",
+      "source_file": "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "source_path": "testing/sample_data/ken_berry/Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "protect, your, kidneys, this, diet, (whole, grains, out",
+      "id": "test_0006"
+    },
+    {
+      "question": "How should someone change their carbohydrate choices to lower kidney disease risk?",
+      "category": "application",
+      "source_file": "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "source_path": "testing/sample_data/ken_berry/Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "protect, your, kidneys, this, diet, (whole, grains, out",
+      "id": "test_0007"
+    },
+    {
+      "question": "What diet is recommended to protect kidneys and excludes whole grains?",
+      "category": "specific",
+      "source_file": "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "source_path": "testing/sample_data/ken_berry/Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Protect Your Kidneys with this Diet (Whole-Grains are OUT).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "protect, your, kidneys, this, diet, (whole, grains, out",
+      "id": "test_0008"
+    },
+    {
+      "question": "How does eating too much sugar cause older-looking, sagging skin?",
+      "category": "factual",
+      "source_file": "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "source_path": "testing/sample_data/ken_berry/11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "signs, you, eating, too, much, sugar, (doctor, reveals",
+      "id": "test_0009"
+    },
+    {
+      "question": "Why does high sugar intake often increase blood pressure more than salt?",
+      "category": "comprehension",
+      "source_file": "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "source_path": "testing/sample_data/ken_berry/11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "signs, you, eating, too, much, sugar, (doctor, reveals",
+      "id": "test_0010"
+    },
+    {
+      "question": "How can someone check if sugary foods are causing post-meal blood sugar spikes?",
+      "category": "application",
+      "source_file": "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "source_path": "testing/sample_data/ken_berry/11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "signs, you, eating, too, much, sugar, (doctor, reveals",
+      "id": "test_0011"
+    },
+    {
+      "question": "What are common signs that you are eating too much sugar?",
+      "category": "specific",
+      "source_file": "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "source_path": "testing/sample_data/ken_berry/11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "11 Signs YOU Are Eating TOO MUCH SUGAR (Doctor Reveals) 2024.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "signs, you, eating, too, much, sugar, (doctor, reveals",
+      "id": "test_0012"
+    },
+    {
+      "question": "Which type of liver is recommended as the easiest to start eating?",
+      "category": "factual",
+      "source_file": "How to Start Eating Liver #shorts.txt",
+      "source_path": "testing/sample_data/ken_berry/How to Start Eating Liver #shorts.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "How to Start Eating Liver #shorts.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "how, start, eating, liver, #shorts",
+      "id": "test_0013"
+    },
+    {
+      "question": "Why does mixing liver into ground beef make it easier to eat?",
+      "category": "comprehension",
+      "source_file": "How to Start Eating Liver #shorts.txt",
+      "source_path": "testing/sample_data/ken_berry/How to Start Eating Liver #shorts.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "How to Start Eating Liver #shorts.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "how, start, eating, liver, #shorts",
+      "id": "test_0014"
+    },
+    {
+      "question": "How can you prepare chicken liver so its taste is less noticeable in burgers?",
+      "category": "application",
+      "source_file": "How to Start Eating Liver #shorts.txt",
+      "source_path": "testing/sample_data/ken_berry/How to Start Eating Liver #shorts.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "How to Start Eating Liver #shorts.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "how, start, eating, liver, #shorts",
+      "id": "test_0015"
+    },
+    {
+      "question": "How can someone start eating liver?",
+      "category": "specific",
+      "source_file": "How to Start Eating Liver #shorts.txt",
+      "source_path": "testing/sample_data/ken_berry/How to Start Eating Liver #shorts.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "How to Start Eating Liver #shorts.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "how, start, eating, liver, #shorts",
+      "id": "test_0016"
+    },
+    {
+      "question": "What hemoglobin A1C range is used to diagnose prediabetes?",
+      "category": "factual",
+      "source_file": "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "source_path": "testing/sample_data/ken_berry/PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "prediabetes, (13, warning, signs, prediabetes), you",
+      "id": "test_0017"
+    },
+    {
+      "question": "How does prediabetes lead to damage in arteries and nerves before diabetes develops?",
+      "category": "comprehension",
+      "source_file": "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "source_path": "testing/sample_data/ken_berry/PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "prediabetes, (13, warning, signs, prediabetes), you",
+      "id": "test_0018"
+    },
+    {
+      "question": "How can someone reverse prediabetes without using medication?",
+      "category": "application",
+      "source_file": "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "source_path": "testing/sample_data/ken_berry/PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "prediabetes, (13, warning, signs, prediabetes), you",
+      "id": "test_0019"
+    },
+    {
+      "question": "What are common warning signs of prediabetes?",
+      "category": "specific",
+      "source_file": "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "source_path": "testing/sample_data/ken_berry/PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "PreDIABETES (13 Warning Signs of Prediabetes) Do You Have Prediabetes.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "prediabetes, (13, warning, signs, prediabetes), you",
+      "id": "test_0020"
+    },
+    {
+      "question": "Which gut bacterium can overtake good bacteria and cause severe weight loss?",
+      "category": "factual",
+      "source_file": "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "source_path": "testing/sample_data/ken_berry/BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "beach, retreat, rebekah, farmer, tailored, keto, heatlh",
+      "id": "test_0021"
+    },
+    {
+      "question": "How does eating more protein help reduce binge eating on an animal-based diet?",
+      "category": "comprehension",
+      "source_file": "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "source_path": "testing/sample_data/ken_berry/BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "beach, retreat, rebekah, farmer, tailored, keto, heatlh",
+      "id": "test_0022"
+    },
+    {
+      "question": "How can someone transition from keto treats to a sustainable animal-based diet?",
+      "category": "application",
+      "source_file": "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "source_path": "testing/sample_data/ken_berry/BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "beach, retreat, rebekah, farmer, tailored, keto, heatlh",
+      "id": "test_0023"
+    },
+    {
+      "question": "What kinds of meats are served at the Tailored Keto Health beach retreat?",
+      "category": "specific",
+      "source_file": "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "source_path": "testing/sample_data/ken_berry/BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "BEACH RETREAT WITH REBEKAH FARMER ( TAILORED KETO HEATLH ).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "beach, retreat, rebekah, farmer, tailored, keto, heatlh",
+      "id": "test_0024"
+    },
+    {
+      "question": "Which two omega-3 fatty acids does the body most readily use?",
+      "category": "factual",
+      "source_file": "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "source_path": "testing/sample_data/ken_berry/7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "signs, omega, deficiency, doctors, often, miss",
+      "id": "test_0025"
+    },
+    {
+      "question": "Why does a high omega-6 to omega-3 ratio make omega-3 supplements less effective?",
+      "category": "comprehension",
+      "source_file": "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "source_path": "testing/sample_data/ken_berry/7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "signs, omega, deficiency, doctors, often, miss",
+      "id": "test_0026"
+    },
+    {
+      "question": "How can someone increase their dietary intake of DHA and EPA?",
+      "category": "application",
+      "source_file": "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "source_path": "testing/sample_data/ken_berry/7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "signs, omega, deficiency, doctors, often, miss",
+      "id": "test_0027"
+    },
+    {
+      "question": "What are seven common signs of omega-3 deficiency?",
+      "category": "specific",
+      "source_file": "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "source_path": "testing/sample_data/ken_berry/7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "7 Signs of OMEGA 3 Deficiency Doctors Often Miss.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "signs, omega, deficiency, doctors, often, miss",
+      "id": "test_0028"
+    },
+    {
+      "question": "Which lab tests are used to detect hyperinsulinemia?",
+      "category": "factual",
+      "source_file": "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "source_path": "testing/sample_data/ken_berry/Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "dangerous, pandemic, you've, never, heard, [it's, hyperinsulinemia",
+      "id": "test_0029"
+    },
+    {
+      "question": "How does hyperinsulinemia lead to type 2 diabetes?",
+      "category": "comprehension",
+      "source_file": "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "source_path": "testing/sample_data/ken_berry/Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "dangerous, pandemic, you've, never, heard, [it's, hyperinsulinemia",
+      "id": "test_0030"
+    },
+    {
+      "question": "How can someone reduce hyperinsulinemia through dietary changes?",
+      "category": "application",
+      "source_file": "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "source_path": "testing/sample_data/ken_berry/Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "dangerous, pandemic, you've, never, heard, [it's, hyperinsulinemia",
+      "id": "test_0031"
+    },
+    {
+      "question": "Why is hyperinsulinemia considered a hidden pandemic of chronic diseases?",
+      "category": "specific",
+      "source_file": "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "source_path": "testing/sample_data/ken_berry/Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "Dangerous PANDEMIC You've Never Heard Of  [It's Hyperinsulinemia] - 2023.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "dangerous, pandemic, you've, never, heard, [it's, hyperinsulinemia",
+      "id": "test_0032"
+    },
+    {
+      "question": "How long should you water fast to deplete glycogen stores?",
+      "category": "factual",
+      "source_file": "KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "source_path": "testing/sample_data/ken_berry/KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "KETO Restart After the Falling OFF the Wagon (7 Steps).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "keto, restart, after, falling, off, wagon, steps",
+      "id": "test_0033"
+    },
+    {
+      "question": "Why does spiking insulin cause temporary fluid weight gain instead of fat?",
+      "category": "comprehension",
+      "source_file": "KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "source_path": "testing/sample_data/ken_berry/KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "KETO Restart After the Falling OFF the Wagon (7 Steps).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "keto, restart, after, falling, off, wagon, steps",
+      "id": "test_0034"
+    },
+    {
+      "question": "How can you prepare keto-friendly high-fat, high-protein snacks for cravings?",
+      "category": "application",
+      "source_file": "KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "source_path": "testing/sample_data/ken_berry/KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "KETO Restart After the Falling OFF the Wagon (7 Steps).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "keto, restart, after, falling, off, wagon, steps",
+      "id": "test_0035"
+    },
+    {
+      "question": "What's the first step to restart keto after falling off the wagon?",
+      "category": "specific",
+      "source_file": "KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "source_path": "testing/sample_data/ken_berry/KETO Restart After the Falling OFF the Wagon (7 Steps).txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "KETO Restart After the Falling OFF the Wagon (7 Steps).txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "keto, restart, after, falling, off, wagon, steps",
+      "id": "test_0036"
+    },
+    {
+      "question": "How is the citizen science collaboration funded to avoid pharmaceutical influence?",
+      "category": "factual",
+      "source_file": "The Berrys Are Coming to Las Vegas!.txt",
+      "source_path": "testing/sample_data/ken_berry/The Berrys Are Coming to Las Vegas!.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "The Berrys Are Coming to Las Vegas!.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "berrys, coming, las, vegas",
+      "id": "test_0037"
+    },
+    {
+      "question": "Why does avoiding large corporate donations increase research credibility?",
+      "category": "comprehension",
+      "source_file": "The Berrys Are Coming to Las Vegas!.txt",
+      "source_path": "testing/sample_data/ken_berry/The Berrys Are Coming to Las Vegas!.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "The Berrys Are Coming to Las Vegas!.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "berrys, coming, las, vegas",
+      "id": "test_0038"
+    },
+    {
+      "question": "How can someone participate in a citizen science project studying human diet?",
+      "category": "application",
+      "source_file": "The Berrys Are Coming to Las Vegas!.txt",
+      "source_path": "testing/sample_data/ken_berry/The Berrys Are Coming to Las Vegas!.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "The Berrys Are Coming to Las Vegas!.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "berrys, coming, las, vegas",
+      "id": "test_0039"
+    },
+    {
+      "question": "Are members of the Berry family planning to attend the Las Vegas event?",
+      "category": "specific",
+      "source_file": "The Berrys Are Coming to Las Vegas!.txt",
+      "source_path": "testing/sample_data/ken_berry/The Berrys Are Coming to Las Vegas!.txt",
+      "author": "Ken Berry",
+      "expected_sources": [
+        "The Berrys Are Coming to Las Vegas!.txt"
+      ],
+      "author_filter": "Ken Berry",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "berrys, coming, las, vegas",
+      "id": "test_0040"
+    },
+    {
+      "question": "Which compound in cannabis is primarily responsible for its psychoactive effects?",
+      "category": "factual",
+      "source_file": "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xthe, effects, cannabis, (marijuana), brain, body",
+      "id": "test_0041"
+    },
+    {
+      "question": "How does the ratio of THC to CBD influence cannabis' overall effects?",
+      "category": "comprehension",
+      "source_file": "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xthe, effects, cannabis, (marijuana), brain, body",
+      "id": "test_0042"
+    },
+    {
+      "question": "How should a person's age influence whether they start or stop using cannabis?",
+      "category": "application",
+      "source_file": "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xthe, effects, cannabis, (marijuana), brain, body",
+      "id": "test_0043"
+    },
+    {
+      "question": "What are the main effects of cannabis on the brain and body?",
+      "category": "specific",
+      "source_file": "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xThe Effects of Cannabis (Marijuana) on the Brain & Body   Huberman Lab Podcast #92.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xthe, effects, cannabis, (marijuana), brain, body",
+      "id": "test_0044"
+    },
+    {
+      "question": "Where are lower motor neurons located?",
+      "category": "factual",
+      "source_file": "xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Failures, Movement & Balance to Learn Faster.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, failures, movement, balance, learn, faster",
+      "id": "test_0045"
+    },
+    {
+      "question": "How does movement influence neuroplasticity?",
+      "category": "comprehension",
+      "source_file": "xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Failures, Movement & Balance to Learn Faster.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, failures, movement, balance, learn, faster",
+      "id": "test_0046"
+    },
+    {
+      "question": "How can someone use movement and balance to learn faster?",
+      "category": "application",
+      "source_file": "xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Failures, Movement & Balance to Learn Faster.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, failures, movement, balance, learn, faster",
+      "id": "test_0047"
+    },
+    {
+      "question": "How can using failures improve learning speed?",
+      "category": "specific",
+      "source_file": "xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Failures, Movement & Balance to Learn Faster.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Failures, Movement & Balance to Learn Faster.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, failures, movement, balance, learn, faster",
+      "id": "test_0048"
+    },
+    {
+      "question": "What dense tissue surrounds muscles and can transmit signals to the adrenal medulla?",
+      "category": "factual",
+      "source_file": "xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Your Nervous System to Enhance Your Immune System.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, your, nervous, system, enhance, immune",
+      "id": "test_0049"
+    },
+    {
+      "question": "How can the nervous system act as a pathway to reduce inflammation?",
+      "category": "comprehension",
+      "source_file": "xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Your Nervous System to Enhance Your Immune System.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, your, nervous, system, enhance, immune",
+      "id": "test_0050"
+    },
+    {
+      "question": "How can acupuncture be used to reduce inflammation in the body?",
+      "category": "application",
+      "source_file": "xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Your Nervous System to Enhance Your Immune System.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, your, nervous, system, enhance, immune",
+      "id": "test_0051"
+    },
+    {
+      "question": "How can your nervous system be used to enhance your immune system?",
+      "category": "specific",
+      "source_file": "xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "source_path": "testing/sample_data/andrew_huberman/xUsing Your Nervous System to Enhance Your Immune System.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "xUsing Your Nervous System to Enhance Your Immune System.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "xusing, your, nervous, system, enhance, immune",
+      "id": "test_0052"
+    },
+    {
+      "question": "How do dopamine levels influence willingness to exert effort toward goals?",
+      "category": "factual",
+      "source_file": "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "source_path": "testing/sample_data/andrew_huberman/AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "ama, maintain, motivation, improve, rem, sleep, set, goals, manage, anxiety",
+      "id": "test_0053"
+    },
+    {
+      "question": "Why does sleep help restore motivation and replenish dopamine?",
+      "category": "comprehension",
+      "source_file": "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "source_path": "testing/sample_data/andrew_huberman/AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "ama, maintain, motivation, improve, rem, sleep, set, goals, manage, anxiety",
+      "id": "test_0054"
+    },
+    {
+      "question": "How should someone alternate intense work and rest to avoid motivation burnout?",
+      "category": "application",
+      "source_file": "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "source_path": "testing/sample_data/andrew_huberman/AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "ama, maintain, motivation, improve, rem, sleep, set, goals, manage, anxiety",
+      "id": "test_0055"
+    },
+    {
+      "question": "How can someone improve REM sleep?",
+      "category": "specific",
+      "source_file": "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "source_path": "testing/sample_data/andrew_huberman/AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "AMA #4 Maintain Motivation, Improve REM Sleep, Set Goals, Manage Anxiety & More.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "ama, maintain, motivation, improve, rem, sleep, set, goals, manage, anxiety",
+      "id": "test_0056"
+    },
+    {
+      "question": "What does the term \"Deep Work\" refer to?",
+      "category": "factual",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0057"
+    },
+    {
+      "question": "How much protein per pound of body weight is recommended for most people?",
+      "category": "factual",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0058"
+    },
+    {
+      "question": "How does frequent task switching affect cognitive performance and focus?",
+      "category": "comprehension",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0059"
+    },
+    {
+      "question": "Why can reducing digital distractions lead to higher-quality work over time?",
+      "category": "comprehension",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0060"
+    },
+    {
+      "question": "How can someone schedule their day to create reliable deep work sessions?",
+      "category": "application",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0061"
+    },
+    {
+      "question": "How can a person use social media and email in a way that minimizes disruption to focus?",
+      "category": "application",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0062"
+    },
+    {
+      "question": "How can you enhance focus and improve productivity?",
+      "category": "specific",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0063"
+    },
+    {
+      "question": "What strategies help improve productivity while avoiding burnout?",
+      "category": "specific",
+      "source_file": "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "source_path": "testing/sample_data/andrew_huberman/Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt",
+      "author": "Andrew Huberman",
+      "expected_sources": [
+        "Dr. Cal Newport How to Enhance Focus and Improve Productivity.txt"
+      ],
+      "author_filter": "Andrew Huberman",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "cal, newport, how, enhance, focus, improve, productivity",
+      "id": "test_0064"
+    },
+    {
+      "question": "Which two probiotic strains are recommended for constipation?",
+      "category": "factual",
+      "source_file": "Probiotics for Constipation Maybe Not.txt",
+      "source_path": "testing/sample_data/dr_berg/Probiotics for Constipation Maybe Not.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Probiotics for Constipation Maybe Not.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "probiotics, constipation, maybe, not",
+      "id": "test_0065"
+    },
+    {
+      "question": "How do potassium and magnesium influence the colon's peristalsis?",
+      "category": "comprehension",
+      "source_file": "Probiotics for Constipation Maybe Not.txt",
+      "source_path": "testing/sample_data/dr_berg/Probiotics for Constipation Maybe Not.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Probiotics for Constipation Maybe Not.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "probiotics, constipation, maybe, not",
+      "id": "test_0066"
+    },
+    {
+      "question": "How should you adjust leafy greens intake if they cause bloating and constipation?",
+      "category": "application",
+      "source_file": "Probiotics for Constipation Maybe Not.txt",
+      "source_path": "testing/sample_data/dr_berg/Probiotics for Constipation Maybe Not.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Probiotics for Constipation Maybe Not.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "probiotics, constipation, maybe, not",
+      "id": "test_0067"
+    },
+    {
+      "question": "Can taking some probiotics make constipation worse?",
+      "category": "specific",
+      "source_file": "Probiotics for Constipation Maybe Not.txt",
+      "source_path": "testing/sample_data/dr_berg/Probiotics for Constipation Maybe Not.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Probiotics for Constipation Maybe Not.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "probiotics, constipation, maybe, not",
+      "id": "test_0068"
+    },
+    {
+      "question": "What supplement is recommended to help dissolve kidney stones that can refer SI joint pain?",
+      "category": "factual",
+      "source_file": "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "root, causes, sacroiliac, joint, pain, relief, berg",
+      "id": "test_0069"
+    },
+    {
+      "question": "How can an ovarian cyst lead to pain in the sacroiliac joint?",
+      "category": "comprehension",
+      "source_file": "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "root, causes, sacroiliac, joint, pain, relief, berg",
+      "id": "test_0070"
+    },
+    {
+      "question": "How can you test whether your SI joint pain is coming from an ovary?",
+      "category": "application",
+      "source_file": "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "root, causes, sacroiliac, joint, pain, relief, berg",
+      "id": "test_0071"
+    },
+    {
+      "question": "What are common root causes of sacroiliac joint pain?",
+      "category": "specific",
+      "source_file": "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Root Causes of Sacroiliac Joint Pain \u2013 SI Joint Pain Relief \u2013 Dr.Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "root, causes, sacroiliac, joint, pain, relief, berg",
+      "id": "test_0072"
+    },
+    {
+      "question": "How does caffeine increase alertness in the brain?",
+      "category": "factual",
+      "source_file": "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "what, caffeine, how, works, berg",
+      "id": "test_0073"
+    },
+    {
+      "question": "Why does blocking adenosine lead to increased focus and wakefulness?",
+      "category": "comprehension",
+      "source_file": "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "what, caffeine, how, works, berg",
+      "id": "test_0074"
+    },
+    {
+      "question": "How should someone consume caffeine to minimize its negative health effects?",
+      "category": "application",
+      "source_file": "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "what, caffeine, how, works, berg",
+      "id": "test_0075"
+    },
+    {
+      "question": "What is caffeine and how does it work?",
+      "category": "specific",
+      "source_file": "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "What Is Caffeine & How Does It Works \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "what, caffeine, how, works, berg",
+      "id": "test_0076"
+    },
+    {
+      "question": "What percentage of the population is either pre-diabetic or diabetic?",
+      "category": "factual",
+      "source_file": "5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "5 Things You Must Know About Ketosis - Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "things, you, must, know, ketosis, berg",
+      "id": "test_0077"
+    },
+    {
+      "question": "How does excess insulin contribute to inflammation and chronic disease?",
+      "category": "comprehension",
+      "source_file": "5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "5 Things You Must Know About Ketosis - Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "things, you, must, know, ketosis, berg",
+      "id": "test_0078"
+    },
+    {
+      "question": "How can someone use intermittent fasting to help normalize their insulin levels?",
+      "category": "application",
+      "source_file": "5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "5 Things You Must Know About Ketosis - Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "things, you, must, know, ketosis, berg",
+      "id": "test_0079"
+    },
+    {
+      "question": "Should fat intake be higher at the start of a ketosis program?",
+      "category": "specific",
+      "source_file": "5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/5 Things You Must Know About Ketosis - Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "5 Things You Must Know About Ketosis - Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "things, you, must, know, ketosis, berg",
+      "id": "test_0080"
+    },
+    {
+      "question": "What are the three types of nerves that high blood sugar can damage?",
+      "category": "factual",
+      "source_file": "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "effects, high, blood, sugar, nerves, berg",
+      "id": "test_0081"
+    },
+    {
+      "question": "How does high blood sugar lead to burning pain and numbness in the feet?",
+      "category": "comprehension",
+      "source_file": "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "effects, high, blood, sugar, nerves, berg",
+      "id": "test_0082"
+    },
+    {
+      "question": "How can B vitamins be used to protect nerves from high blood sugar?",
+      "category": "application",
+      "source_file": "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "effects, high, blood, sugar, nerves, berg",
+      "id": "test_0083"
+    },
+    {
+      "question": "What are the effects of high blood sugar on nerves?",
+      "category": "specific",
+      "source_file": "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Effects of High Blood Sugar On Nerves \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "effects, high, blood, sugar, nerves, berg",
+      "id": "test_0084"
+    },
+    {
+      "question": "How do omega-3 fatty acids affect triglyceride levels?",
+      "category": "factual",
+      "source_file": "Key Food to Extend Your Lifespan by 5 Years.txt",
+      "source_path": "testing/sample_data/dr_berg/Key Food to Extend Your Lifespan by 5 Years.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Key Food to Extend Your Lifespan by 5 Years.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "key, food, extend, your, lifespan, years",
+      "id": "test_0085"
+    },
+    {
+      "question": "How do omega-3 fatty acids counter omega-6 fatty acids?",
+      "category": "comprehension",
+      "source_file": "Key Food to Extend Your Lifespan by 5 Years.txt",
+      "source_path": "testing/sample_data/dr_berg/Key Food to Extend Your Lifespan by 5 Years.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Key Food to Extend Your Lifespan by 5 Years.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "key, food, extend, your, lifespan, years",
+      "id": "test_0086"
+    },
+    {
+      "question": "How can a vegetarian or vegan get enough active omega-3s?",
+      "category": "application",
+      "source_file": "Key Food to Extend Your Lifespan by 5 Years.txt",
+      "source_path": "testing/sample_data/dr_berg/Key Food to Extend Your Lifespan by 5 Years.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Key Food to Extend Your Lifespan by 5 Years.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "key, food, extend, your, lifespan, years",
+      "id": "test_0087"
+    },
+    {
+      "question": "What key food can extend your lifespan by five years?",
+      "category": "specific",
+      "source_file": "Key Food to Extend Your Lifespan by 5 Years.txt",
+      "source_path": "testing/sample_data/dr_berg/Key Food to Extend Your Lifespan by 5 Years.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Key Food to Extend Your Lifespan by 5 Years.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "key, food, extend, your, lifespan, years",
+      "id": "test_0088"
+    },
+    {
+      "question": "How many additional bowel cancer cases occur per 100,000 people?",
+      "category": "factual",
+      "source_file": "Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Is Red Meat Bad for You \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "red, meat, bad, you, berg",
+      "id": "test_0089"
+    },
+    {
+      "question": "Why are observational questionnaire studies weaker than experimental studies for diet-disease links?",
+      "category": "comprehension",
+      "source_file": "Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Is Red Meat Bad for You \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "red, meat, bad, you, berg",
+      "id": "test_0090"
+    },
+    {
+      "question": "How can someone choose beef to increase omega-3 intake?",
+      "category": "application",
+      "source_file": "Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Is Red Meat Bad for You \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "red, meat, bad, you, berg",
+      "id": "test_0091"
+    },
+    {
+      "question": "Is red meat bad for your health?",
+      "category": "specific",
+      "source_file": "Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/Is Red Meat Bad for You \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Is Red Meat Bad for You \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "red, meat, bad, you, berg",
+      "id": "test_0092"
+    },
+    {
+      "question": "Which micronutrients are commonly depleted by proton pump inhibitors?",
+      "category": "factual",
+      "source_file": "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "source_path": "testing/sample_data/dr_berg/Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "common, nutrient, deficiencies, caused, drugs, that, you, know, berg, depletion",
+      "id": "test_0093"
+    },
+    {
+      "question": "Why can antacids lead to poor absorption of minerals like zinc and calcium?",
+      "category": "comprehension",
+      "source_file": "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "source_path": "testing/sample_data/dr_berg/Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "common, nutrient, deficiencies, caused, drugs, that, you, know, berg, depletion",
+      "id": "test_0094"
+    },
+    {
+      "question": "How can someone reduce magnesium and potassium loss while using diuretics?",
+      "category": "application",
+      "source_file": "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "source_path": "testing/sample_data/dr_berg/Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "common, nutrient, deficiencies, caused, drugs, that, you, know, berg, depletion",
+      "id": "test_0095"
+    },
+    {
+      "question": "What nutrient deficiencies commonly result from taking statin medications?",
+      "category": "specific",
+      "source_file": "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "source_path": "testing/sample_data/dr_berg/Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "Common Nutrient Deficiencies Caused by Drugs that You Should Know \u2013 Dr.Berg on Nutrient Depletion.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "common, nutrient, deficiencies, caused, drugs, that, you, know, berg, depletion",
+      "id": "test_0096"
+    },
+    {
+      "question": "Which hormonal imbalance is linked to fat accumulation around the hips and thighs?",
+      "category": "factual",
+      "source_file": "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "blood, type, diet, body, berg",
+      "id": "test_0097"
+    },
+    {
+      "question": "Why are bodies described as better suited to run on ketones rather than glucose?",
+      "category": "comprehension",
+      "source_file": "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "blood, type, diet, body, berg",
+      "id": "test_0098"
+    },
+    {
+      "question": "How can someone start a healthy ketosis plan combined with intermittent fasting?",
+      "category": "application",
+      "source_file": "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "blood, type, diet, body, berg",
+      "id": "test_0099"
+    },
+    {
+      "question": "What is the main difference between the blood type diet and the body type diet?",
+      "category": "specific",
+      "source_file": "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "source_path": "testing/sample_data/dr_berg/The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Blood Type Diet vs. Body Type Diet \u2013 Dr. Berg.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "blood, type, diet, body, berg",
+      "id": "test_0100"
+    },
+    {
+      "question": "Which part of the world is mostly deficient in vitamin D?",
+      "category": "factual",
+      "source_file": "The Part of The World with the most Vitamin D Deficiency.txt",
+      "source_path": "testing/sample_data/dr_berg/The Part of The World with the most Vitamin D Deficiency.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Part of The World with the most Vitamin D Deficiency.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "part, world, most, vitamin, deficiency",
+      "id": "test_0101"
+    },
+    {
+      "question": "How might high sugar consumption be related to vitamin D deficiency?",
+      "category": "comprehension",
+      "source_file": "The Part of The World with the most Vitamin D Deficiency.txt",
+      "source_path": "testing/sample_data/dr_berg/The Part of The World with the most Vitamin D Deficiency.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Part of The World with the most Vitamin D Deficiency.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "part, world, most, vitamin, deficiency",
+      "id": "test_0102"
+    },
+    {
+      "question": "How can people in the Middle East improve their vitamin D levels?",
+      "category": "application",
+      "source_file": "The Part of The World with the most Vitamin D Deficiency.txt",
+      "source_path": "testing/sample_data/dr_berg/The Part of The World with the most Vitamin D Deficiency.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Part of The World with the most Vitamin D Deficiency.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "medium",
+      "ground_truth_aspects": [],
+      "keywords": "part, world, most, vitamin, deficiency",
+      "id": "test_0103"
+    },
+    {
+      "question": "Which region has the highest rate of vitamin D deficiency?",
+      "category": "specific",
+      "source_file": "The Part of The World with the most Vitamin D Deficiency.txt",
+      "source_path": "testing/sample_data/dr_berg/The Part of The World with the most Vitamin D Deficiency.txt",
+      "author": "Dr Berg",
+      "expected_sources": [
+        "The Part of The World with the most Vitamin D Deficiency.txt"
+      ],
+      "author_filter": "Dr Berg",
+      "difficulty": "easy",
+      "ground_truth_aspects": [],
+      "keywords": "part, world, most, vitamin, deficiency",
+      "id": "test_0104"
+    }
+  ]
+}
