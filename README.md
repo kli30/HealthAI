@@ -77,6 +77,7 @@ openai/
 ## Features
 
 - **Multiple LLM Providers**: Supports both OpenAI (default) and Anthropic Claude
+- **Cross-Encoder Reranking**: Improves retrieval accuracy using two-stage ranking (enabled by default)
 - **Contextual Embeddings**: Adds metadata context to chunks before embedding for improved retrieval accuracy
 - **Semantic Search**: Automatically finds relevant transcript excerpts for your questions
 - **Automatic Metadata Extraction**: Extracts author, keywords, and topics from file organization
@@ -108,6 +109,7 @@ openai/
 - `evaluation_results/` - Generated evaluation reports in markdown
 - `example_folder_rag.py` - View collection statistics and usage examples
 - `demo_auto_metadata.py` - Demonstrate metadata extraction
+- `demo_reranking.py` - Demonstrate cross-encoder reranking features
 
 ## Example Usage
 
@@ -270,12 +272,54 @@ Total Test Cases: 100
 - `testing/test_datasets/` - Test question datasets
 - `testing/evaluation_results/` - Generated evaluation reports
 
+## Reranking
+
+The RAG system uses **two-stage retrieval** for improved accuracy:
+
+### How It Works
+
+1. **Stage 1 - Semantic Search**: Fast bi-encoder retrieves 20+ candidate chunks using embeddings
+2. **Stage 2 - Reranking**: Cross-encoder model (`cross-encoder/ms-marco-MiniLM-L6-v2`) precisely scores each candidate
+3. **Final Results**: Top N chunks returned, sorted by cross-encoder relevance scores
+
+### Benefits
+
+- **Better Accuracy**: Cross-encoders are more accurate than bi-encoders for ranking
+- **Nuanced Understanding**: Captures query-document interactions better
+- **Improved Context**: Higher quality chunks lead to better LLM responses
+
+### Usage
+
+Reranking is **enabled by default**. To disable it:
+
+```bash
+# Terminal chat without reranking
+uv run python src/chat_rag.py --no-reranking
+
+# Web interface without reranking
+uv run python src/web_chat.py --no-reranking
+```
+
+### Demo
+
+See reranking in action:
+```bash
+uv run python testing/demo_reranking.py
+```
+
+This demonstrates:
+- Relevance scores with reranking
+- Comparison: with vs without reranking
+- Author filtering + reranking
+- Context with relevance scores
+
 ## Architecture
 
 The RAG system uses:
 - **OpenAI GPT-4o** (default) or **Anthropic Claude Sonnet 4.5** for chat responses
 - **ChromaDB** for vector storage
-- **sentence-transformers** (`all-MiniLM-L6-v2`) for embeddings
+- **sentence-transformers** (`all-MiniLM-L6-v2`) for bi-encoder embeddings
+- **cross-encoder** (`ms-marco-MiniLM-L6-v2`) for reranking
 - **~500 word chunks** with 50 word overlap for optimal context retrieval
 - **Flask** for the web interface
 

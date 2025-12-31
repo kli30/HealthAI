@@ -199,6 +199,13 @@ Examples:
         help="Run in debug mode (default: False)"
     )
 
+    parser.add_argument(
+        "--no-reranking",
+        dest="use_reranking",
+        action="store_false",
+        help="Disable cross-encoder reranking (enabled by default)"
+    )
+
     args = parser.parse_args()
 
     # Initialize the LLM client (defaults to OpenAI)
@@ -207,7 +214,7 @@ Examples:
     # Initialize RAG system
     print(f"Using LLM: {client.provider.upper()} ({client.model})")
     print(f"Loading RAG system from {args.chroma_db}...")
-    rag = initialize_rag_with_transcripts(args.chroma_db)
+    rag = initialize_rag_with_transcripts(args.chroma_db, use_reranking=args.use_reranking)
     print("RAG system ready!")
 
     # Show available authors

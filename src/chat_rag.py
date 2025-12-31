@@ -33,11 +33,12 @@ IMPORTANT INSTRUCTIONS:
 
 Remember: Prioritize the retrieved context over your general knowledge when relevant context is available."""
 
-def chat_with_rag(chroma_db: str = "./chroma_db"):
+def chat_with_rag(chroma_db: str = "./chroma_db", use_reranking: bool = True):
     """Interactive chatbot with RAG-enhanced responses.
 
     Args:
         chroma_db: Path to ChromaDB database directory (default: ./chroma_db)
+        use_reranking: If True, use cross-encoder reranking for improved relevance (default: True)
     """
     # Initialize the LLM client (defaults to OpenAI)
     client = get_llm_client()
@@ -52,7 +53,7 @@ def chat_with_rag(chroma_db: str = "./chroma_db"):
 
     # Initialize RAG system
     print(f"{YELLOW}Loading RAG system from {chroma_db}...{RESET}")
-    rag = initialize_rag_with_transcripts(chroma_db)
+    rag = initialize_rag_with_transcripts(chroma_db, use_reranking=use_reranking)
     print(f"{YELLOW}RAG system ready!{RESET}")
 
     # Show available authors
@@ -119,6 +120,13 @@ Examples:
         help="Path to ChromaDB database directory (default: ./chroma_db)"
     )
 
+    parser.add_argument(
+        "--no-reranking",
+        dest="use_reranking",
+        action="store_false",
+        help="Disable cross-encoder reranking (enabled by default)"
+    )
+
     args = parser.parse_args()
 
-    chat_with_rag(chroma_db=args.chroma_db)
+    chat_with_rag(chroma_db=args.chroma_db, use_reranking=args.use_reranking)
