@@ -151,6 +151,13 @@ def run_evaluation(
     print(f"✓ Report generated: {report_file}")
     print()
 
+    # Save results to JSON
+    results_path = Path(output_dir) / f"{timestamp}_llm_results.json"
+    with open(results_path, 'w') as f:
+        json.dump(results, f, indent=2)
+    print(f"✓ Results saved to: {results_path}")
+    print()
+
     # Show summary
     valid_results = [r for r in results if 'error' not in r]
     error_count = len(results) - len(valid_results)

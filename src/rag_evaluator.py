@@ -6,12 +6,18 @@ in a RAG (Retrieval-Augmented Generation) system. It uses an LLM to judge the qu
 of retrieved chunks and generated responses.
 """
 
+from pathlib import Path
 import re
 import time
 from typing import List, Tuple, Dict, Any, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
+import sys
+
+SRC_DIR = Path(__file__).parent
+sys.path.append(str(SRC_DIR))
 from llm_client import LLMClient, get_llm_client
+
 
 
 class RetrievalEvaluator:
@@ -264,7 +270,25 @@ OVERALL: [overall summary in 1-2 sentences]"""
         Returns:
             Dictionary with hallucination detection results
         """
-        prompt = f"""Compare the AI response against the provided context.
+        system_prompt = """You are a hallucination detector. Your job is to check if claims in an AI response are supported by the provided context. Be precise and thorough.
+        
+Your Task:
+1. Read the context carefully
+2. Read the response carefully
+3. Check if each factual claim in the response is supported by the context
+4. Output your findings
+
+Output format:
+- If all claims are supported by the context, output EXACTLY: "no hallucinations detected"
+- If you find unsupported claims, list them as numbered items:
+  1. [specific claim] - NOT FOUND in context
+  2. [specific claim] - NOT FOUND in context
+
+Be strict: only mark factual claims that are NOT present in the context.
+General statements or logical reasoning based on the context are acceptable.
+"""
+
+        user_prompt = f"""Compare the AI response against the provided context.
 Identify any claims in the response that are NOT supported by the context.
 
 Context:
@@ -273,19 +297,47 @@ Context:
 Response:
 {response}
 
-List any unsupported claims (hallucinations):
-1. [claim] - NOT FOUND in context
-2. [claim] - NOT FOUND in context
+"""
 
-If all claims are supported, output: "No hallucinations detected"
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
 
-Be strict: only mark something as hallucinated if it's a factual claim not present in the context.
-General statements or reasoning based on the context are acceptable."""
-
-        messages = [{"role": "user", "content": prompt}]
         detection_response = ""
-        for chunk in self.llm.stream_chat(messages, max_tokens=400):
-            detection_response += chunk
+        try:
+            # Calculate input size
+            total_input_chars = len(system_prompt) + len(user_prompt)
+            print(f"\nCalling LLM with provider: {self.llm.provider}, model: {self.llm.model}")
+            print(f"Input size: system={len(system_prompt)} chars, user={len(user_prompt)} chars, total={total_input_chars} chars (~{total_input_chars//4} tokens)")
+
+            chunk_count = 0
+            # Increase max_tokens to 1000 to allow room for output
+            for chunk in self.llm.stream_chat(messages, max_tokens=5000):
+                chunk_count += 1
+                detection_response += chunk
+            print(f"Received {chunk_count} chunks from LLM")
+        except Exception as e:
+            import traceback
+            print(f"\nERROR in hallucination detection LLM call: {e}")
+            print("Full traceback:")
+            traceback.print_exc()
+            detection_response = ""
+
+        # Debug output
+        print("\n" + "="*80)
+        print("HALLUCINATION DETECTION DEBUG")
+        print("="*80)
+        print("\nSYSTEM PROMPT:")
+        print(system_prompt)
+        print("\nUSER PROMPT:")
+        print(user_prompt)
+        print("\n" + "-"*80)
+        print("LLM RESPONSE:")
+        print(repr(detection_response))  # Use repr to show exact content including whitespace
+        print(f"Response length: {len(detection_response)}")
+        print(f"Response is empty: {not detection_response or not detection_response.strip()}")
+        print("-"*80)
 
         # Check if hallucinations were detected
         has_hallucinations = "no hallucinations detected" not in detection_response.lower()
@@ -297,6 +349,10 @@ General statements or reasoning based on the context are acceptable."""
             for line in lines:
                 if re.match(r'^\d+\.', line.strip()):
                     hallucinations.append(line.strip())
+
+        print(f"\nhas_hallucinations: {has_hallucinations}")
+        print(f"hallucinations list: {hallucinations}")
+        print("="*80 + "\n")
 
         return {
             "has_hallucinations": has_hallucinations,

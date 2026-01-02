@@ -1,7 +1,7 @@
 import chromadb
 from chromadb.utils import embedding_functions
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 class TranscriptRAG:
     """RAG system for querying transcript data using semantic search."""

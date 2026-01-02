@@ -48,6 +48,9 @@ class LLMClient:
 
     def _stream_openai(self, messages: list, max_tokens: int) -> Iterator[str]:
         """Stream from OpenAI API."""
+        print(f"[OpenAI API] Model: {self.model}, Max tokens: {max_tokens}")
+        print(f"[OpenAI API] Messages: {len(messages)} messages")
+
         stream = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -55,9 +58,21 @@ class LLMClient:
             stream=True
         )
 
+        chunk_count = 0
+        content_chars = 0
         for chunk in stream:
+            chunk_count += 1
+
+            # Debug: show finish reason
+            if chunk.choices[0].finish_reason:
+                print(f"[OpenAI API] Finish reason: {chunk.choices[0].finish_reason}")
+
             if chunk.choices[0].delta.content is not None:
-                yield chunk.choices[0].delta.content
+                content = chunk.choices[0].delta.content
+                content_chars += len(content)
+                yield content
+
+        print(f"[OpenAI API] Stream complete: {chunk_count} chunks, {content_chars} characters")
 
     def _stream_anthropic(self, messages: list, max_tokens: int) -> Iterator[str]:
         """Stream from Anthropic API."""

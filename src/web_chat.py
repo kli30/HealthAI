@@ -37,7 +37,7 @@ IMPORTANT INSTRUCTIONS:
 Remember: Prioritize the retrieved context over your general knowledge when relevant context is available."""
 
 # System prompt for RAG-enhanced responses
-SYSTEM_PROMPT = """You are a helpful AI assistant with access to a database of expert transcripts and documents.
+SYSTEM_PROMPT_EVAL = """You are a helpful AI assistant with access to a database of expert transcripts and documents.
 
 IMPORTANT INSTRUCTIONS:
 
@@ -89,7 +89,7 @@ def chat():
     # Get or create conversation history for this session
     if session_id not in conversations:
         # Initialize new session with system prompt
-        conversations[session_id] = [{"role": "system", "content": SYSTEM_PROMPT}]
+        conversations[session_id] = [{"role": "system", "content": SYSTEM_PROMPT_EVAL}]
 
     conversation = conversations[session_id]
 
