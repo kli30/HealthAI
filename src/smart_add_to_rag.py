@@ -10,6 +10,7 @@ This script automatically extracts metadata from file paths and filenames:
 
 import os
 import argparse
+import time
 from pathlib import Path
 from typing import Optional, Dict, List
 from rag_system import TranscriptRAG
@@ -124,7 +125,7 @@ def add_folder_with_auto_metadata(
         ):
             added_count += 1
 
-    # Print summary
+    # Print summary (timing will be added by caller)
     if verbose:
         print("\n" + "=" * 60)
         print("Summary:")
@@ -295,6 +296,9 @@ Metadata is automatically extracted:
 
     print("use_contextual_embeddings", args.use_contextual_embeddings)
 
+    # Start timer
+    start_time = time.time()
+
     try:
         # Handle data directory mode (simplest)
         if args.data_dir:
@@ -321,7 +325,7 @@ Metadata is automatically extracted:
                 rag,
                 custom_metadata=custom_metadata if custom_metadata else None,
                 verbose=verbose,
-                use_contextual_embeddings=use_contextual_embeddings,
+                use_contextual_embeddings=args.use_contextual_embeddings,
             )
             if verbose:
                 print("\nCollection Statistics:")
@@ -337,7 +341,7 @@ Metadata is automatically extracted:
                 persist_directory=args.persist_dir,
                 recursive=args.recursive,
                 verbose=verbose,
-                use_contextual_embeddings=use_contextual_embeddings,
+                use_contextual_embeddings=args.use_contextual_embeddings,
             )
 
         else:
@@ -348,6 +352,24 @@ Metadata is automatically extracted:
     except Exception as e:
         print(f"Error: {e}")
         return 1
+
+    finally:
+        # Calculate and display elapsed time
+        elapsed_time = time.time() - start_time
+        hours = int(elapsed_time // 3600)
+        minutes = int((elapsed_time % 3600) // 60)
+        seconds = elapsed_time % 60
+
+        if verbose:
+            print("\n" + "=" * 60)
+            print("⏱️  Execution Time:")
+            if hours > 0:
+                print(f"  Total time: {hours}h {minutes}m {seconds:.2f}s")
+            elif minutes > 0:
+                print(f"  Total time: {minutes}m {seconds:.2f}s")
+            else:
+                print(f"  Total time: {seconds:.2f}s")
+            print("=" * 60)
 
     return 0
 
