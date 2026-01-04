@@ -261,8 +261,8 @@ Metadata is automatically extracted:
     parser.add_argument(
         '--persist-dir',
         type=str,
-        default='./chroma_db300',
-        help='Directory to persist the vector database (default: ./chroma_db300)'
+        default='./chroma_db_context',
+        help='Directory to persist the vector database (default: ./chroma_db_context)'
     )
 
     # Optional custom metadata

@@ -22,7 +22,7 @@ IMPORTANT INSTRUCTIONS:
 3. **Concise Summaries**: Summarize the information from the context in a clear and concise way. Don't just copy the text - synthesize and explain it.
 
 4. **When No Relevant Context is Found**: If no context is provided or the context is not relevant to the question:
-   - Clearly state: "I could not find relevant information about this in the available transcripts/documents."
+   - Clearly state: "I could not find relevant information about this in the available database."
    - Then offer: "However, based on my training data, I can provide some general information: [answer]"
    - Make it clear you're switching from the database to general knowledge.
 
@@ -33,11 +33,12 @@ IMPORTANT INSTRUCTIONS:
 
 Remember: Prioritize the retrieved context over your general knowledge when relevant context is available."""
 
-def chat_with_rag(chroma_db: str = "./chroma_db"):
+def chat_with_rag(chroma_db: str = "./chroma_db", use_reranking: bool = True):
     """Interactive chatbot with RAG-enhanced responses.
 
     Args:
         chroma_db: Path to ChromaDB database directory (default: ./chroma_db)
+        use_reranking: If True, use cross-encoder reranking for improved relevance (default: True)
     """
     # Initialize the LLM client (defaults to OpenAI)
     client = get_llm_client()
@@ -52,7 +53,7 @@ def chat_with_rag(chroma_db: str = "./chroma_db"):
 
     # Initialize RAG system
     print(f"{YELLOW}Loading RAG system from {chroma_db}...{RESET}")
-    rag = initialize_rag_with_transcripts(chroma_db)
+    rag = initialize_rag_with_transcripts(chroma_db, use_reranking=use_reranking)
     print(f"{YELLOW}RAG system ready!{RESET}")
 
     # Show available authors
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Use default database (./chroma_db)
+  # Use default database (./chroma_db_context)
   python chat_rag.py
 
   # Use custom database
@@ -115,10 +116,17 @@ Examples:
     parser.add_argument(
         "--db", "--chroma-db",
         dest="chroma_db",
-        default="./chroma_db",
-        help="Path to ChromaDB database directory (default: ./chroma_db)"
+        default="./chroma_db_context",
+        help="Path to ChromaDB database directory (default: ./chroma_db_context)"
+    )
+
+    parser.add_argument(
+        "--no-reranking",
+        dest="use_reranking",
+        action="store_false",
+        help="Disable cross-encoder reranking (enabled by default)"
     )
 
     args = parser.parse_args()
 
-    chat_with_rag(chroma_db=args.chroma_db)
+    chat_with_rag(chroma_db=args.chroma_db, use_reranking=args.use_reranking)

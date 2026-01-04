@@ -1,24 +1,35 @@
 import chromadb
 from chromadb.utils import embedding_functions
 import os
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Union
+from sentence_transformers import CrossEncoder
 
 class TranscriptRAG:
-    """RAG system for querying transcript data using semantic search."""
+    """RAG system for querying transcript data using semantic search with optional reranking."""
 
-    def __init__(self, collection_name: str = "transcripts", persist_directory: str = "./chroma_db"):
+    def __init__(self, collection_name: str = "transcripts", persist_directory: str = "./chroma_db", use_reranking: bool = True):
         """Initialize the RAG system with ChromaDB.
 
         Args:
             collection_name: Name of the ChromaDB collection
             persist_directory: Directory to persist the vector database
+            use_reranking: If True, use cross-encoder reranking for improved relevance
         """
         self.client = chromadb.PersistentClient(path=persist_directory)
+        self.use_reranking = use_reranking
 
         # Use sentence transformers for embeddings (all-MiniLM-L6-v2 is fast and effective)
         self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="all-MiniLM-L6-v2"
         )
+
+        # Initialize cross-encoder for reranking if enabled
+        if self.use_reranking:
+            print("Loading cross-encoder model for reranking...")
+            self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L6-v2')
+            print("Reranking enabled")
+        else:
+            self.reranker = None
 
         # Get or create collection
         self.collection = self.client.get_or_create_collection(
@@ -138,7 +149,7 @@ class TranscriptRAG:
         context_note = " with contextual embeddings" if use_contextual_embeddings else ""
         print(f"Added {len(chunks)} chunks from {base_name}{context_note}")
 
-    def query(self, query_text: str, n_results: int = 3, author_filter=None, return_original: bool = True) -> List[Tuple[str, dict]]:
+    def query(self, query_text: str, n_results: int = 3, author_filter=None, return_original: bool = True, return_scores: bool = False) -> Union[List[Tuple[str, dict]], List[Tuple[str, dict, float]]]:
         """Query the vector database for relevant chunks.
 
         Args:
@@ -146,9 +157,10 @@ class TranscriptRAG:
             n_results: Number of results to return
             author_filter: Optional author name(s) to filter results. Can be a string or list of strings.
             return_original: If True, return original chunks without context headers (cleaner for display)
+            return_scores: If True, return relevance scores with each result
 
         Returns:
-            List of tuples (chunk_text, metadata)
+            List of tuples (chunk_text, metadata) or (chunk_text, metadata, score) if return_scores=True
         """
         # Build where clause for filtering by author
         where_clause = None
@@ -160,9 +172,15 @@ class TranscriptRAG:
                 # Single author filter
                 where_clause = {"author": author_filter}
 
+        # If reranking is enabled, retrieve more candidates for reranking
+        initial_n_results = n_results
+        if self.use_reranking and self.reranker is not None:
+            # Retrieve more candidates (7x or at least 20) for reranking
+            initial_n_results = max(n_results * 7, 20)
+
         results = self.collection.query(
             query_texts=[query_text],
-            n_results=n_results,
+            n_results=initial_n_results,
             where=where_clause
         )
 
@@ -178,32 +196,69 @@ class TranscriptRAG:
                 else:
                     chunk_text = doc
 
-                chunks.append((chunk_text, metadata))
+                chunks.append((chunk_text, metadata, doc))  # Keep doc for reranking
 
-        return chunks
+        # Apply reranking if enabled
+        if self.use_reranking and self.reranker is not None and chunks:
+            # Prepare pairs for cross-encoder (query, document)
+            pairs = [(query_text, chunk[2]) for chunk in chunks]  # Use contextual doc for reranking
 
-    def get_context_for_query(self, query_text: str, n_results: int = 3, author_filter=None) -> str:
+            # Get reranking scores
+            scores = self.reranker.predict(pairs)
+
+            # Combine chunks with scores and sort by score (descending)
+            chunks_with_scores = [(chunk[0], chunk[1], float(score)) for chunk, score in zip(chunks, scores)]
+            chunks_with_scores.sort(key=lambda x: x[2], reverse=True)
+
+            # Take top n_results
+            chunks_with_scores = chunks_with_scores[:n_results]
+
+            if return_scores:
+                return chunks_with_scores
+            else:
+                return [(text, metadata) for text, metadata, _ in chunks_with_scores]
+        else:
+            # No reranking - use original order and limit to n_results
+            chunks = chunks[:n_results]
+            if return_scores:
+                # Return with placeholder scores (0.0) when reranking is disabled
+                return [(text, metadata, 0.0) for text, metadata, _ in chunks]
+            else:
+                return [(text, metadata) for text, metadata, _ in chunks]
+
+    def get_context_for_query(self, query_text: str, n_results: int = 3, author_filter=None, show_scores: bool = False) -> str:
         """Get formatted context string for a query.
 
         Args:
             query_text: The query string
             n_results: Number of chunks to retrieve
             author_filter: Optional author name(s) to filter results. Can be a string or list of strings.
+            show_scores: If True, include relevance scores in the output (requires reranking to be enabled)
 
         Returns:
             Formatted context string to include in a prompt
         """
         # Query with author filter (handles both single author and list of authors)
-        chunks = self.query(query_text, n_results, author_filter=author_filter)
+        if show_scores:
+            chunks = self.query(query_text, n_results, author_filter=author_filter, return_scores=True)
+        else:
+            chunks = self.query(query_text, n_results, author_filter=author_filter, return_scores=False)
 
         if not chunks:
             return ""
 
         context_parts = ["Here is relevant context from the transcripts:\n"]
 
-        for i, (text, metadata) in enumerate(chunks, 1):
-            source = metadata.get('source', 'unknown')
-            context_parts.append(f"\n[Source: {source}]")
+        for i, chunk_data in enumerate(chunks, 1):
+            if show_scores:
+                text, metadata, score = chunk_data
+                source = metadata.get('source', 'unknown')
+                context_parts.append(f"\n[Source: {source} | Relevance: {score:.4f}]")
+            else:
+                text, metadata = chunk_data
+                source = metadata.get('source', 'unknown')
+                context_parts.append(f"\n[Source: {source}]")
+
             context_parts.append(text)
             context_parts.append("")
 
@@ -282,28 +337,23 @@ class TranscriptRAG:
         print("=" * 60 + "\n")
 
 
-def initialize_rag_with_transcripts(persist_directory: str):
-    """Initialize RAG system and load all transcripts."""
-    rag = TranscriptRAG(persist_directory=persist_directory)
+def initialize_rag_with_transcripts(persist_directory: str, use_reranking: bool = True):
+    """Initialize RAG system and load all transcripts.
+
+    Args:
+        persist_directory: Directory to persist the vector database
+        use_reranking: If True, use cross-encoder reranking for improved relevance (default: True)
+    """
+    rag = TranscriptRAG(persist_directory=persist_directory, use_reranking=use_reranking)
 
     # Check if collection is already populated
     count = rag.collection.count()
     if count > 0:
         print(f"Collection already contains {count} chunks")
-        return rag
-
-    # Add transcripts
-    transcripts = [
-        ("transcript_ketamine.txt", {"topic": "ketamine", "podcast": "Huberman Lab"}),
-        ("transcript_depression.txt", {"topic": "depression", "podcast": "Huberman Lab"})
-    ]
-
-    for transcript_file, metadata in transcripts:
-        if os.path.exists(transcript_file):
-            rag.add_transcript(transcript_file, metadata)
-        else:
-            print(f"Warning: {transcript_file} not found")
-
+        rag.print_collection_stats()
+    else:
+        print("Collection is empty. Please add transcripts to the collection.")
+    
     return rag
 
 

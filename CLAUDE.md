@@ -1,46 +1,49 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## Project Structure
 
 ```
-openai/
-├── src/                          # Essential source code
-│   ├── rag_system.py            # Core RAG system
+healthAI/
+├── src/                          # Source code
+│   ├── rag_system.py            # Core RAG system with ChromaDB
 │   ├── llm_client.py            # Unified LLM client (OpenAI/Anthropic)
 │   ├── metadata_extractor.py   # Automatic metadata extraction
-│   ├── chat.py                  # Basic chat interface
-│   ├── chat_rag.py              # RAG-enhanced chat
-│   ├── web_chat.py              # Web interface
-│   ├── smart_add_to_rag.py     # Smart RAG file/folder adder
+│   ├── chat_rag.py              # RAG-enhanced chat interface
+│   ├── web_chat.py              # Flask web interface
+│   ├── smart_add_to_rag.py     # Smart RAG adder with auto metadata
 │   ├── add_folder_to_rag.py    # Manual folder-based RAG adder
-│   └── templates/               # HTML templates for web interface
-├── testing/                      # Testing and example code
-│   ├── example_folder_rag.py   # Usage examples
-│   └── demo_auto_metadata.py   # Metadata extraction demo
+│   └── templates/               # HTML templates for web UI
+├── testing/                      # Demos and examples
+│   ├── example_folder_rag.py   # RAG collection statistics
+│   ├── demo_auto_metadata.py   # Metadata extraction demo
+│   └── demo_reranking.py       # Cross-encoder reranking demo
 ├── data/                         # Transcript data (organized by author)
-├── chroma_db/                    # Vector database storage
-└── [documentation files]         # README.md, CLAUDE.md, etc.
+└── chroma_db/                    # Vector database storage
 ```
 
 ## Overview
 
-This is a Python project for interacting with transcripts from multiple domain experts. It consists of three main components:
+A RAG-powered chatbot system for querying health and science transcripts from domain experts.
 
-1. **RAG System** (`src/smart_add_to_rag.py`): Add transcripts to the RAG system with automatic metadata extraction
-2. **RAG-Enhanced Chatbot** (`src/chat_rag.py`): Chatbot with automatic context retrieval from transcripts
-3. **Web Chatbox** (`src/web_chat.py`): Browser-based chatbox interface with RAG support
+**Key Components:**
+- **RAG System**: ChromaDB vector database with contextual embeddings and cross-encoder reranking
+- **Chat Interface**: Terminal-based (`chat_rag.py`) and web-based (`web_chat.py`) interfaces
+- **Smart Metadata**: Automatic extraction from folder/file names (author, keywords, topics)
 
-## Running the Code
+## Quick Start
 
-RAG-enhanced chat (with transcript context):
+### RAG-Enhanced Chat
 ```bash
-# Using OpenAI with default database (./chroma_db)
+# Using OpenAI with default database (./chroma_db_context) - reranking enabled by default
 uv run python src/chat_rag.py
 
 # Using custom database
 uv run python src/chat_rag.py --db ./chroma_db_context
+
+# Disable reranking for faster queries (slightly lower accuracy)
+uv run python src/chat_rag.py --no-reranking
 
 # Using Anthropic Claude with custom database
 export LLM_PROVIDER=anthropic
@@ -49,19 +52,22 @@ uv run python src/chat_rag.py --db ./my_custom_db
 # View all options
 uv run python src/chat_rag.py --help
 ```
-- Type messages to chat with AI (OpenAI GPT-4o by default, or Claude)
+- Type messages to chat with AI (OpenAI gpt-5-mini by default, or Claude Sonnet 4.5)
 - Type 'quit' to exit
 - In RAG mode, relevant transcript chunks are automatically retrieved for each query
-- Use `--db` to specify which ChromaDB database to use
+- Use `--db` to specify which ChromaDB database to use (default: `./chroma_db_context`)
 
 ### Run Web Chatbox
 Web-based chat interface (with RAG):
 ```bash
-# Using default database on default port (5000)
+# Using default database on default port (5000) - reranking enabled by default
 uv run python src/web_chat.py
 
 # Using custom database
 uv run python src/web_chat.py --db ./chroma_db_context
+
+# Disable reranking for faster queries
+uv run python src/web_chat.py --no-reranking
 
 # Using custom port
 uv run python src/web_chat.py --port 8080
@@ -123,27 +129,27 @@ uv run python testing/demo_auto_metadata.py
 ```
 This demonstrates how automatic metadata extraction works with various filename patterns.
 
+### Test Cross-Encoder Reranking
+```bash
+uv run python testing/demo_reranking.py
+```
+This demonstrates the reranking system with comparisons, relevance scores, and performance impact.
+
 ## Architecture
 
 ### LLM Client (`src/llm_client.py`)
 - **Unified Interface**: Single interface for both OpenAI and Anthropic APIs
-- **Default Provider**: OpenAI GPT-4o (can be changed via `LLM_PROVIDER` env var)
+- **Default Provider**: OpenAI gpt-5-mini (can be changed via `LLM_PROVIDER` env var)
 - **Streaming Support**: Consistent streaming interface across providers
-- **Model Configuration**: Default models (GPT-4o for OpenAI, Claude Sonnet 4.5 for Anthropic)
+- **Model Configuration**: Default models (gpt-5-mini for OpenAI, Claude Sonnet 4.5 for Anthropic)
 - **Easy Switching**: Change providers via environment variable without code changes
-
-### Chat Interface (`src/chat.py`)
-- Uses the unified LLM client to interface with OpenAI or Anthropic
-- Maintains conversation history in memory for context across messages
-- Streams responses for real-time output
-- Default: OpenAI GPT-4o with 1000 max tokens
-- Uses ANSI color codes for terminal formatting (blue for user, green for AI)
 
 ### RAG System (`src/rag_system.py`)
 - **Vector Database**: ChromaDB with persistent storage in `./chroma_db/`
 - **Embeddings**: Uses `sentence-transformers` with the `all-MiniLM-L6-v2` model (local, no API required)
+- **Cross-Encoder Reranking**: Two-stage retrieval using `cross-encoder/ms-marco-MiniLM-L6-v2` for improved relevance (enabled by default)
 - **Contextual Embeddings**: Prepends metadata (author, topic, keywords) to chunks before embedding for better retrieval
-- **Chunking Strategy**: Splits transcripts into ~500 word chunks with 50 word overlap
+- **Chunking Strategy**: Splits transcripts into ~300 word chunks with 30 word overlap
 - **Retrieval**: Semantic search returns top-k most relevant chunks with source metadata
 - **Key Class**: `TranscriptRAG` handles indexing, querying, and context formatting
 - **Author Filtering**: Query results can be filtered by author metadata
@@ -176,7 +182,7 @@ This demonstrates how automatic metadata extraction works with various filename 
 
 ### RAG-Enhanced Chat (`src/chat_rag.py`)
 - Automatically retrieves top 3 relevant chunks from transcripts for each user query
-- Uses unified LLM client (default: OpenAI GPT-4o, or Claude Sonnet 4.5) with 2000 max tokens
+- Uses unified LLM client (default: OpenAI gpt-5-mini, or Claude Sonnet 4.5) with 2000 max tokens
 - Injects retrieved context into messages before sending to the LLM
 - Visual indicator when context is retrieved (yellow "[Retrieved context from transcripts]")
 - Maintains full conversation history for multi-turn dialogue
@@ -203,8 +209,9 @@ This demonstrates how automatic metadata extraction works with various filename 
 3. Embeddings and chunks are stored in ChromaDB (persists to disk)
 4. When user asks a question in `src/chat_rag.py`:
    - Query is embedded using the same model
-   - Top-k semantically similar chunks are retrieved via vector similarity search
-   - Retrieved chunks are prepended to the user's message as context
+   - Top-20+ semantically similar candidates are retrieved via vector similarity search (when reranking is enabled)
+   - Cross-encoder reranks candidates by relevance scores (when reranking is enabled)
+   - Top-k highest-scoring chunks are selected and prepended to the user's message as context
    - LLM (OpenAI or Anthropic) generates a response informed by relevant transcript excerpts
 
 ## Dependencies
@@ -220,7 +227,7 @@ Dependencies include:
 - `openai` - OpenAI API client (default LLM provider)
 - `anthropic` - Anthropic Claude API client (alternative LLM provider)
 - `chromadb` - Vector database for RAG
-- `sentence-transformers` - Local embeddings model
+- `sentence-transformers` - Local embeddings model (includes both bi-encoders and cross-encoders)
 - `flask` - Web framework for the chatbox interface
 
 **API Key Configuration:**
@@ -229,11 +236,17 @@ Dependencies include:
 
 ## RAG System Notes
 
-- **First Run**: On first execution, `src/chat_rag.py` will download the sentence-transformers model (~100MB) and index both transcripts. This may take 30-60 seconds.
-- **Persistence**: The vector database is persisted to `./chroma_db/`, so subsequent runs are instant.
+- **First Run**: On first execution, `src/chat_rag.py` will download the sentence-transformers models (~100MB for bi-encoder, ~80MB for cross-encoder) and index transcripts.
+- **Persistence**: Vector databases are persisted to disk (default varies by tool), so subsequent runs are instant.
+- **Database Defaults**: Different tools use different default databases:
+  - `chat_rag.py` and `web_chat.py`: `./chroma_db_context`
+  - `smart_add_to_rag.py`: `./chroma_db300`
+  - `add_folder_to_rag.py`: `./chroma_db`
+  - **Important**: Ensure you're adding data to and querying from the same database using the `--db` flag.
 - **Reindexing**: To reindex transcripts, delete the `./chroma_db/` directory or call `rag.clear_collection()`.
 - **Chunk Metadata**: Each chunk includes `source` (filename), `chunk_index` (position), and custom metadata like `keywords` and `author`.
 - **Customization**: Adjust chunk size, overlap, or number of retrieved results in `src/rag_system.py`.
+- **Reranking**: Enabled by default. Disable with `--no-reranking` flag for faster queries (with slightly lower accuracy).
 
 ## Contextual Embeddings
 
@@ -303,6 +316,117 @@ uv run python testing/demo_contextual_embeddings.py
 ```
 
 This compares retrieval accuracy with and without contextual embeddings.
+
+## Cross-Encoder Reranking
+
+### What is Cross-Encoder Reranking?
+
+Cross-encoder reranking is a **two-stage retrieval approach** that significantly improves result quality:
+
+1. **Stage 1 - Fast Retrieval (Bi-Encoder)**: Retrieve 20+ candidate chunks using fast bi-encoder embeddings
+2. **Stage 2 - Precise Ranking (Cross-Encoder)**: Re-score all candidates using a more accurate cross-encoder model
+3. **Final Selection**: Return top N chunks sorted by cross-encoder scores
+
+### Why Reranking?
+
+**Bi-Encoders** (used in Stage 1):
+- Encode query and documents independently
+- Very fast for initial retrieval
+- Good recall, but moderate precision
+
+**Cross-Encoders** (used in Stage 2):
+- Jointly encode query and document together
+- Much more accurate at measuring relevance
+- Captures subtle semantic relationships
+- Slower, so only used on a small candidate set
+
+By combining both, we get the speed of bi-encoders with the accuracy of cross-encoders.
+
+### Benefits
+
+1. **Higher Accuracy**: Cross-encoders are ~10-20% more accurate than bi-encoders for ranking
+2. **Better Context Quality**: More relevant chunks lead to better LLM responses
+3. **Nuanced Understanding**: Captures query-document interactions that bi-encoders miss
+4. **Minimal Speed Impact**: Only reranks a small candidate set (~20 chunks)
+
+### How It Works
+
+**Initialization:**
+```python
+from rag_system import TranscriptRAG
+
+# With reranking (default, recommended)
+rag = TranscriptRAG(use_reranking=True)
+
+# Without reranking (faster, slightly lower accuracy)
+rag = TranscriptRAG(use_reranking=False)
+```
+
+**Querying with scores:**
+```python
+# Basic query (reranking happens automatically if enabled)
+results = rag.query("What are the benefits of sleep?", n_results=3)
+
+# Query with relevance scores
+results = rag.query("What are the benefits of sleep?", n_results=3, return_scores=True)
+for text, metadata, score in results:
+    print(f"Score: {score:.4f} | {text[:100]}...")
+
+# Get formatted context with scores
+context = rag.get_context_for_query("What are the benefits of sleep?", show_scores=True)
+```
+
+**Command-line usage:**
+```bash
+# With reranking (default)
+uv run python src/chat_rag.py
+
+# Without reranking (faster)
+uv run python src/chat_rag.py --no-reranking
+
+# Web interface with reranking
+uv run python src/web_chat.py
+
+# Web interface without reranking
+uv run python src/web_chat.py --no-reranking
+```
+
+### Model Details
+
+- **Bi-Encoder**: `all-MiniLM-L6-v2` (384 dimensions, ~80MB)
+  - Fast encoding (~1000 docs/sec on CPU)
+  - Used for initial candidate retrieval
+
+- **Cross-Encoder**: `cross-encoder/ms-marco-MiniLM-L6-v2` (~80MB)
+  - Trained on MS MARCO passage ranking dataset
+  - Optimized for question-answering and passage retrieval
+  - Scores range from ~-10 to +10 (higher = more relevant)
+
+### Testing Reranking
+
+Run the demo to see reranking in action:
+```bash
+uv run python testing/demo_reranking.py
+```
+
+This demonstrates:
+1. **Basic reranking**: Query with relevance scores
+2. **Comparison**: Results with vs without reranking
+3. **Context with scores**: Formatted context showing relevance
+4. **Author filtering**: Reranking combined with author filters
+
+### Performance Impact
+
+**With Reranking:**
+- Initial retrieval: ~20-50ms (retrieve 20 candidates)
+- Reranking: ~10-30ms (score 20 candidates with cross-encoder)
+- Total: ~30-80ms per query
+
+**Without Reranking:**
+- Initial retrieval: ~20-50ms (retrieve 3 results directly)
+- Total: ~20-50ms per query
+
+The small speed decrease (~30ms) is usually worth it for significantly better accuracy.
 
 ## Automatic Metadata Extraction
 

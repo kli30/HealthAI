@@ -11,21 +11,20 @@ app = Flask(__name__)
 client = None
 rag = None
 
-# System prompt for RAG-enhanced responses
+# System prompt for RAG-enhanced responses in production mode
 SYSTEM_PROMPT = """You are a helpful AI assistant with access to a database of expert transcripts and documents.
 
 IMPORTANT INSTRUCTIONS:
 
 1. **Answer Based on Retrieved Context**: If relevant context is provided below, answer the question ONLY using information from that context. Do not use your general knowledge unless explicitly needed to clarify or explain concepts.
 
-2. **Citation Requirements**: When using information from the context, ALWAYS cite your sources by stating:
+2. **Citation Requirements**: When using information from the context, ALWAYS cite your source(AUTHOR only) by stating:
    - The author/expert name (e.g., "According to Andrew Huberman...")
-   - The source document if available (e.g., "from the transcript on sleep optimization")
 
 3. **Concise Summaries**: Summarize the information from the context in a clear and concise way. Don't just copy the text - synthesize and explain it.
 
 4. **When No Relevant Context is Found**: If no context is provided or the context is not relevant to the question:
-   - Clearly state: "I could not find relevant information about this in the available transcripts/documents."
+   - Clearly state: "I could not find relevant information about this in the available database."
    - Then offer: "However, based on my training data, I can provide some general information: [answer]"
    - Make it clear you're switching from the database to general knowledge.
 
@@ -36,20 +35,19 @@ IMPORTANT INSTRUCTIONS:
 
 Remember: Prioritize the retrieved context over your general knowledge when relevant context is available."""
 
-# System prompt for RAG-enhanced responses
+# System prompt for RAG-enhanced responses in evaluation mode
 SYSTEM_PROMPT_EVAL = """You are a helpful AI assistant with access to a database of expert transcripts and documents.
 
 IMPORTANT INSTRUCTIONS:
 
 1. **Answer Based on Retrieved Context**: If relevant context is provided below, answer the question ONLY using information from that context. Do not use your general knowledge unless explicitly needed to clarify or explain concepts.
 
-2. **Citation Requirements**: When using information from the context, ALWAYS cite your sources by stating:
+2. **Citation Requirements**: When using information from the context, ALWAYS cite your source(AUTHOR only) by stating:
    - The author/expert name (e.g., "According to Andrew Huberman...")
-   - The source document if available (e.g., "from the transcript on sleep optimization")
 
 3. **Concise Summaries**: Summarize the information from the context in a clear and concise way. Don't just copy the text - synthesize and explain it.
 
-4. **When No Relevant Context is Found**: Clearly state: "I could not find relevant information about this in the available transcripts/documents." 
+4. **When No Relevant Context is Found**: Clearly state: "I could not find relevant information about this in the available database." 
  
 
 Remember: Prioritize the retrieved context over your general knowledge when relevant context is available."""
@@ -159,7 +157,7 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Use default database (./chroma_db) on default port (5000)
+  # Use default database (./chroma_db_context) on default port (5000)
   python web_chat.py
 
   # Use custom database
@@ -176,8 +174,8 @@ Examples:
     parser.add_argument(
         "--db", "--chroma-db",
         dest="chroma_db",
-        default="./chroma_db",
-        help="Path to ChromaDB database directory (default: ./chroma_db)"
+        default="./chroma_db_context",
+        help="Path to ChromaDB database directory (default: ./chroma_db_context)"
     )
 
     parser.add_argument(
@@ -199,6 +197,13 @@ Examples:
         help="Run in debug mode (default: False)"
     )
 
+    parser.add_argument(
+        "--no-reranking",
+        dest="use_reranking",
+        action="store_false",
+        help="Disable cross-encoder reranking (enabled by default)"
+    )
+
     args = parser.parse_args()
 
     # Initialize the LLM client (defaults to OpenAI)
@@ -207,7 +212,7 @@ Examples:
     # Initialize RAG system
     print(f"Using LLM: {client.provider.upper()} ({client.model})")
     print(f"Loading RAG system from {args.chroma_db}...")
-    rag = initialize_rag_with_transcripts(args.chroma_db)
+    rag = initialize_rag_with_transcripts(args.chroma_db, use_reranking=args.use_reranking)
     print("RAG system ready!")
 
     # Show available authors
