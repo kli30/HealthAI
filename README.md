@@ -159,7 +159,7 @@ The system includes a comprehensive evaluation framework using **LLM-as-Judge** 
 
 Run a quick evaluation on sample questions:
 ```bash
-uv run python testing/run_evaluation.py --num-questions 5
+uv run python testing/run_evaluation.py --num-questions 10
 ```
 
 View the generated report in `testing/evaluation_results/`.
@@ -323,5 +323,4 @@ The RAG system uses:
 - **cross-encoder** (`ms-marco-MiniLM-L6-v2`) for reranking
 - **~300 word chunks** with 30 word overlap for optimal context retrieval
 - **Flask** for the web interface
-
-See `CLAUDE.md` for detailed architecture documentation.
+ 
