@@ -323,5 +323,5 @@ The RAG system uses:
 - **cross-encoder** (`ms-marco-MiniLM-L6-v2`) for reranking
 - **~300 word chunks** with 30 word overlap for optimal context retrieval
 - **Flask** for the web interface
- 
+
 See `CLAUDE.md` for detailed architecture documentation.
