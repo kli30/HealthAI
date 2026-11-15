@@ -3,7 +3,7 @@ name = "healthai"
 version = "0.1.0"
 description = "A Retrieval-Augmented Generation (RAG) system for querying podcast transcripts using Claude/OpenAI with automatic metadata extraction"
 readme = "README.md"
-requires-python = "==3.10"
+requires-python = ">=3.10"
 authors = [
     { name = "kli30", email = "kv123ai@gmail.com" }
 ]
