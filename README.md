@@ -74,6 +74,110 @@ healthAI/
    ```
    Then open http://localhost:5000 in your browser.
 
+## YouTube video text (issue #4)
+
+Fetch existing captions and the video's introduction/description without loading
+ChromaDB, models or LLM clients. Standalone API and JSON CLI; no automatic RAG import.
+
+```bash
+# Existing project environment:
+uv sync --extra youtube
+python -m src.youtube_text 'https://www.youtube.com/watch?v=VIDEO_ID_HERE'
+
+# Small isolated environment, without ML/RAG dependencies:
+python3 -m venv /path/to/healthai-youtube-venv
+/path/to/healthai-youtube-venv/bin/python -m pip install \
+  'youtube-transcript-api>=1.2,<2' 'yt-dlp>=2025.1.15'
+/path/to/healthai-youtube-venv/bin/python -m src.youtube_text 'https://youtu.be/VIDEO_ID_HERE'
+```
+
+Replace `VIDEO_ID_HERE` with a real 11-character ID; these placeholders are not
+verified live examples. Run from the repository root, or install the project.
+
+```python
+from src.youtube_text import YouTubeTextClient
+
+client = YouTubeTextClient()  # reuse across calls for cache/cooldown
+result = client.get('https://www.youtube.com/watch?v=VIDEO_ID_HERE')
+# Always: video_id: str, author: str, url: str, transcript: str, status: str
+# Also: title: str, description: str, keywords: list[str],
+#       transcript_status: str, metadata_status: str
+```
+
+- HTTP(S) `youtube.com` (also `www`/`m`) watch, shorts, embed and live links,
+  plus `youtu.be` links, are accepted. IDs must be exactly 11 URL-safe characters.
+  Raw IDs, arbitrary hosts, userinfo, ports, encoded paths/queries, duplicate `v`
+  parameters and playlist-only URLs return `invalid_url` without network access.
+  Providers receive only a validated ID/canonical HTTPS URL.
+- Captions use `youtube-transcript-api` 1.x, the same caption-first tool used by
+  our YouTube helper. One listing chooses English if available (manual preferred
+  over generated within that language); otherwise any available language (manual
+  first). Text is joined without rewriting caption wording. No audio download,
+  speech recognition or translation occurs.
+- Metadata uses one `yt-dlp` extraction per uncached video, with downloads and
+  subtitle writes disabled. `description` is the introduction below the video,
+  **not viewer comments**. `author` is channel name, falling back to uploader.
+  `keywords` are video tags, not inferred keywords. Missing fields remain empty
+  strings/lists; they are never invented.
+
+| Status | Meaning |
+| --- | --- |
+| `ok` | Caption and metadata retrieval succeeded; individual metadata fields may be absent. |
+| `invalid_url` | Failed validation; no providers called. |
+| `no_transcript` | Provider confirmed disabled/absent captions; metadata may still be present. |
+| `blocked` | Access blocked/rate-limited, **not** evidence of absent captions. |
+| `unavailable` | Video unavailable/private/unplayable/age-restricted. |
+| `transient_error` | Timeout/connection failure or recognized server error. |
+| `provider_error` | Unrecognized failure, malformed response or empty captions. |
+| `dependency_missing` | Optional YouTube dependency not installed. |
+| `partial` | Captions succeeded but metadata retrieval failed. |
+
+When captions fail, overall status is the caption status. Metadata is attempted
+unless blocked. `transcript_status` and `metadata_status` expose both outcomes;
+`not_requested` is used for invalid input. Successful data survives failure of the
+other stage. CLI exits 0 only for `ok`, 1 for other result statuses (usage errors 2).
+
+**Request discipline:** zero automatic retries; 10-second socket/request timeouts
+(not an overall wall-clock deadline across extractor requests). Reusable clients
+cache stages independently by video ID: success, absent captions and unavailable
+videos for one hour; transient/other failures for 30 seconds. A block starts a
+five-minute instance-wide cooldown, skips further uncached network calls
+(including metadata after a caption block), and preserves cached data. Bounded
+LRU cache defaults to 128 videos (`cache_size` configurable). Instances are
+synchronous, not thread-safe; caches/cooldowns are neither shared nor persistent.
+New CLI processes have no shared cooldown. Reuse a client; do not run retry loops
+or many CLI processes against a blocked network. No proxy evasion, browser-cookie
+harvesting, credentials or paid service is configured.
+
+**Offline verification:** install only the two optional packages in the isolated
+environment above, then run (no YouTube requests or paid LLM calls):
+
+```bash
+python -m unittest discover -v
+# Equivalent explicit suite:
+python -m unittest discover -s tests -v
+# Optional checks: install ruff and mypy in that environment first.
+ruff check src/youtube_text.py tests
+ruff format --check src/youtube_text.py tests
+mypy --follow-untyped-imports src/youtube_text.py
+python -m compileall -q src/youtube_text.py tests
+```
+
+Tests cover URL parsing, orchestration, cache/cooldown expiry, partial failures
+and adapters with network boundaries mocked. Live YouTube access is deliberately
+not part of this suite. `TextProvider` allows injection: implement
+`transcript(video_id) -> str`, `metadata(video_id) -> dict`, raising
+`ProviderError(status)` for expected failures. Unexpected programming exceptions
+propagate. No automated audio/provider fallback is enabled.
+
+Pre-existing `testing/run_evaluation.py` is an LLM/model-backed evaluation runner,
+not an offline unit suite. Full pytest collection also imports
+`src/test_generator2.py` and needs the separate `tqdm` dependency. With `pytest`
+and `tqdm` installed, `python -m pytest -q --capture=sys` runs the full discovered
+suite without model downloads or paid calls. System-stream capture avoids a
+file-descriptor capture `FileNotFoundError` observed in the development sandbox.
+The explicit unittest suite needs only the YouTube optional dependencies.
+
 ## Features
 
 - **Multiple LLM Providers**: Supports both OpenAI (default) and Anthropic Claude
